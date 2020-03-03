@@ -47,24 +47,14 @@ variable "my_az2" {
     default = "ap-northeast-2c"
 }
 
-variable "ui_ami_id-a" {
+variable "ui_ami_id" {
     type    = string
-    default = "ami-0c8ee51f1770990ed"
+    default = "ami-0ecd78c22823e02ef"
 }
 
-variable "ui_ami_id-c" {
+variable "api_ami_id" {
     type    = string
-    default = "ami-0c1005b46db897acf"
-}
-
-variable "api_ami_id-a" {
-    type    = string
-    default = "ami-0214414f047aea460"
-}
-
-variable "api_ami_id-c" {
-    type    = string
-    default = "ami-0cbdbc595049d3731"
+    default = "ami-0ecd78c22823e02ef"
 }
 
 variable "target_group_path" {

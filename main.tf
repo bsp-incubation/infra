@@ -544,7 +544,7 @@ resource "aws_security_group_rule" "private-egress-MySQL" {
 # CRBS-public UI 인스턴스 설정
 resource "aws_instance" "CRBS-public-a" {
   instance_type               = "t2.micro"
-  ami                         = var.ui_ami_id-a
+  ami                         = var.ui_ami_id
   key_name                    = var.key_name
   vpc_security_group_ids      = [aws_security_group.CRBS-security_group-public.id]
   subnet_id                   = aws_subnet.CRBS-subnet-public-a.id
@@ -554,7 +554,7 @@ resource "aws_instance" "CRBS-public-a" {
 
 resource "aws_instance" "CRBS-public-c" {
   instance_type             = "t2.micro"
-  ami                     = var.ui_ami_id-c
+  ami                     = var.ui_ami_id
   key_name                = var.key_name
   vpc_security_group_ids  = [aws_security_group.CRBS-security_group-public.id]
   subnet_id               = aws_subnet.CRBS-subnet-public-c.id
@@ -565,7 +565,7 @@ resource "aws_instance" "CRBS-public-c" {
 # CRBS-public API 인스턴스 설정
 resource "aws_instance" "CRBS-private-a" {
   instance_type               = "t2.micro"
-  ami                         = var.api_ami_id-a
+  ami                         = var.api_ami_id
   key_name                    = var.key_name
   vpc_security_group_ids      = [aws_security_group.CRBS-security_group-private.id]
   subnet_id                   = aws_subnet.CRBS-subnet-private-a.id
@@ -574,7 +574,7 @@ resource "aws_instance" "CRBS-private-a" {
 
 resource "aws_instance" "CRBS-private-c" {
   instance_type             = "t2.micro"
-  ami                     = var.api_ami_id-c
+  ami                     = var.api_ami_id
   key_name                = var.key_name
   vpc_security_group_ids  = [aws_security_group.CRBS-security_group-private.id]
   subnet_id               = aws_subnet.CRBS-subnet-private-c.id
