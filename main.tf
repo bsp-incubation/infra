@@ -544,7 +544,6 @@ data "aws_ami" "UI-ami" {
   most_recent = true
   filter {
     name = "name"
-    # values = ["public-a"]
     values = ["UI-ami"]
   }
   filter {
@@ -557,8 +556,7 @@ data "aws_ami" "API-ami" {
   most_recent = true
   filter {
     name = "name"
-    # values = ["private-a"]
-      values = ["API-ami"]
+    values = ["API-ami"]
   }
   filter {
     name = "virtualization-type"

@@ -47,16 +47,6 @@ variable "my_az2" {
     default = "ap-northeast-2c"
 }
 
-variable "ui_ami_id" {
-    type    = string
-    default = "ami-0ecd78c22823e02ef"
-}
-
-variable "api_ami_id" {
-    type    = string
-    default = "ami-0ecd78c22823e02ef"
-}
-
 variable "target_group_path" {
     type    = string
     default = "/health"
