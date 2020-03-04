@@ -545,7 +545,7 @@ data "aws_ami" "UI-ami" {
   filter {
     name = "name"
     # values = ["public-a"]
-    values = ["public"]
+    values = ["UI-ami"]
   }
   filter {
     name = "virtualization-type"
@@ -558,7 +558,7 @@ data "aws_ami" "API-ami" {
   filter {
     name = "name"
     # values = ["private-a"]
-      values = ["private"]
+      values = ["API-ami"]
   }
   filter {
     name = "virtualization-type"
