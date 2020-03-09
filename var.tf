@@ -47,7 +47,12 @@ variable "my_az2" {
     default = "ap-northeast-2c"
 }
 
-variable "target_group_path" {
+variable "target_group_external_path" {
+    type    = string
+    default = "/"
+}
+
+variable "target_group_internal_path" {
     type    = string
     default = "/health"
 }

@@ -544,7 +544,7 @@ data "aws_ami" "UI-ami" {
   most_recent = true
   filter {
     name = "name"
-    values = ["UI-ami"]
+    values = ["UI-ami*"]
   }
   filter {
     name = "virtualization-type"
@@ -556,7 +556,7 @@ data "aws_ami" "API-ami" {
   most_recent = true
   filter {
     name = "name"
-    values = ["API-ami"]
+    values = ["API-ami*"]
   }
   filter {
     name = "virtualization-type"
@@ -568,44 +568,44 @@ data "aws_ami" "API-ami" {
 # ====================================================create server===================================================
 
 # CRBS-public UI 인스턴스 설정
-resource "aws_instance" "CRBS-public-a" {
-  instance_type               = "t2.micro"
-  ami                         = data.aws_ami.UI-ami.id
-  key_name                    = var.key_name
-  vpc_security_group_ids      = [aws_security_group.CRBS-security_group-public.id]
-  subnet_id                   = aws_subnet.CRBS-subnet-public-a.id
-  associate_public_ip_address = true
-  tags = { Name="CRBS-public-a" }
-}
+# resource "aws_instance" "CRBS-public-a" {
+#   instance_type               = "t2.micro"
+#   ami                         = data.aws_ami.UI-ami.id
+#   key_name                    = var.key_name
+#   vpc_security_group_ids      = [aws_security_group.CRBS-security_group-public.id]
+#   subnet_id                   = aws_subnet.CRBS-subnet-public-a.id
+#   associate_public_ip_address = true
+#   tags = { Name="CRBS-public-a" }
+# }
 
-resource "aws_instance" "CRBS-public-c" {
-  instance_type             = "t2.micro"
-  ami                     = data.aws_ami.UI-ami.id
-  key_name                = var.key_name
-  vpc_security_group_ids  = [aws_security_group.CRBS-security_group-public.id]
-  subnet_id               = aws_subnet.CRBS-subnet-public-c.id
-  associate_public_ip_address = true
-  tags = { Name = "CRBS-public-c" }
-}
+# resource "aws_instance" "CRBS-public-c" {
+#   instance_type             = "t2.micro"
+#   ami                     = data.aws_ami.UI-ami.id
+#   key_name                = var.key_name
+#   vpc_security_group_ids  = [aws_security_group.CRBS-security_group-public.id]
+#   subnet_id               = aws_subnet.CRBS-subnet-public-c.id
+#   associate_public_ip_address = true
+#   tags = { Name = "CRBS-public-c" }
+# }
 
 # CRBS-public API 인스턴스 설정
-resource "aws_instance" "CRBS-private-a" {
-  instance_type               = "t2.micro"
-  ami                         = data.aws_ami.API-ami.id
-  key_name                    = var.key_name
-  vpc_security_group_ids      = [aws_security_group.CRBS-security_group-private.id]
-  subnet_id                   = aws_subnet.CRBS-subnet-private-a.id
-  tags = { Name="CRBS-private-a" }
-}
+# resource "aws_instance" "CRBS-private-a" {
+#   instance_type               = "t2.micro"
+#   ami                         = data.aws_ami.API-ami.id
+#   key_name                    = var.key_name
+#   vpc_security_group_ids      = [aws_security_group.CRBS-security_group-private.id]
+#   subnet_id                   = aws_subnet.CRBS-subnet-private-a.id
+#   tags = { Name="CRBS-private-a" }
+# }
 
-resource "aws_instance" "CRBS-private-c" {
-  instance_type             = "t2.micro"
-  ami                     = data.aws_ami.API-ami.id
-  key_name                = var.key_name
-  vpc_security_group_ids  = [aws_security_group.CRBS-security_group-private.id]
-  subnet_id               = aws_subnet.CRBS-subnet-private-c.id
-  tags = { Name = "CRBS-private-c" }
-}
+# resource "aws_instance" "CRBS-private-c" {
+#   instance_type             = "t2.micro"
+#   ami                     = data.aws_ami.API-ami.id
+#   key_name                = var.key_name
+#   vpc_security_group_ids  = [aws_security_group.CRBS-security_group-private.id]
+#   subnet_id               = aws_subnet.CRBS-subnet-private-c.id
+#   tags = { Name = "CRBS-private-c" }
+# }
 
 # External alb 설정
 resource "aws_lb" "CRBS-external" {
@@ -630,7 +630,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
     healthy_threshold   = 10
     unhealthy_threshold = 2
     timeout             = 5
-    path                = var.target_group_path
+    path                = var.target_group_external_path
     interval            = 10
     port                = 80
   }
@@ -649,16 +649,16 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
 }
 
 # alb에 UI instance 연결
-resource "aws_alb_target_group_attachment" "CRBS-UI-a" {
-  target_group_arn = aws_lb_target_group.CRBS-UI.arn
-  target_id        = aws_instance.CRBS-public-a.id
-  port             = 80
-}
-resource "aws_alb_target_group_attachment" "CRBS-UI-c" {
-  target_group_arn = aws_lb_target_group.CRBS-UI.arn
-  target_id        = aws_instance.CRBS-public-c.id
-  port             = 80
-}
+# resource "aws_alb_target_group_attachment" "CRBS-UI-a" {
+#   target_group_arn = aws_lb_target_group.CRBS-UI.arn
+#   target_id        = aws_instance.CRBS-public-a.id
+#   port             = 80
+# }
+# resource "aws_alb_target_group_attachment" "CRBS-UI-c" {
+#   target_group_arn = aws_lb_target_group.CRBS-UI.arn
+#   target_id        = aws_instance.CRBS-public-c.id
+#   port             = 80
+# }
 
 # ========================================================
 
@@ -685,7 +685,7 @@ resource "aws_lb_target_group" "CRBS-API" {
     healthy_threshold   = 10
     unhealthy_threshold = 2
     timeout             = 5
-    path                = var.target_group_path
+    path                = var.target_group_internal_path
     interval            = 10
     port                = 80
   }
@@ -704,41 +704,217 @@ resource "aws_lb_listener" "CRBS-API-listener" {
 }
 
 # Internal alb에 API instance 연결
-resource "aws_alb_target_group_attachment" "CRBS-API-a" {
-  target_group_arn = aws_lb_target_group.CRBS-API.arn
-  target_id        = aws_instance.CRBS-private-a.id
-  port             = 80
+# resource "aws_alb_target_group_attachment" "CRBS-API-a" {
+#   target_group_arn = aws_lb_target_group.CRBS-API.arn
+#   target_id        = aws_instance.CRBS-private-a.id
+#   port             = 80
+# }
+
+# resource "aws_alb_target_group_attachment" "CRBS-API-c" {
+#   target_group_arn = aws_lb_target_group.CRBS-API.arn
+#   target_id        = aws_instance.CRBS-private-c.id
+#   port             = 80
+# }
+
+# =================================================Instance Policy & Role======================================================
+resource "aws_iam_role" "CRBS-instace_role" {
+  name = "CRBS-instace_role"
+
+  assume_role_policy = <<EOF
+{
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "ec2.amazonaws.com"
+          },
+          "Effect": "Allow"
+        }
+      ]
+    }
+EOF
 }
 
-resource "aws_alb_target_group_attachment" "CRBS-API-c" {
-  target_group_arn = aws_lb_target_group.CRBS-API.arn
-  target_id        = aws_instance.CRBS-private-c.id
-  port             = 80
+resource "aws_iam_policy" "CRBS-instace_policy" {
+  name        = "CRBS-instace_policy"
+  description = "CRBS-instace_policy"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
-
-# ====================================================create RDS===================================================
-
-resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
-  name       = "crbs-rds-subnet-group"
-  subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
-  description = "RDS subnet group for CRBS"
-  tags = { Name = "crbs-rds-subnet-group" }
+resource "aws_iam_role_policy_attachment" "CRBS-instace_role_policy-attach" {
+  role       = "${aws_iam_role.CRBS-instace_role.name}"
+  policy_arn = "${aws_iam_policy.CRBS-instace_policy.arn}"
 }
 
-resource "aws_db_instance" "CRBS-rds-instance" {
-  identifier           = "crbs-rds-instance"
-  allocated_storage    = 20
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "8.0.19"
-  instance_class       = "db.t2.micro"
-  username             = var.db_username
-  password             = var.db_password
-  port              = var.db_port
-  db_subnet_group_name = aws_db_subnet_group.CRBS-rds-subnet-group.name
-  multi_az             = true
-  vpc_security_group_ids = [aws_security_group.CRBS-security_group-private.id]
-  # final_snapshot_identifier = "crbs-rds-instance"
-  skip_final_snapshot = true
+resource "aws_iam_instance_profile" "CRBS-instace_profile" {
+  name = "CRBS-instace_profile"
+  role = "${aws_iam_role.CRBS-instace_role.name}"
 }
+
+# =========================================================aws_launch_template========================================================= #
+
+# aws_launch_template
+resource "aws_launch_template" "UI-template" {
+  name = "UI_template"
+  image_id = "${data.aws_ami.UI-ami.id}"
+  instance_type = "t2.micro"
+  key_name = var.key_name
+
+  iam_instance_profile  {
+    arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
+    # name            = "${aws_iam_instance_profile.CRBS-instace_profile.name}"
+  }
+
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups = ["${aws_security_group.CRBS-security_group-public.id}"]
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+
+  tags = {
+      Name = "UI_template"
+    }
+  }
+}
+
+resource "aws_launch_template" "API-template" {
+  name = "API_template"
+  image_id = "${data.aws_ami.API-ami.id}"
+  instance_type = "t2.micro"
+  key_name = var.key_name
+
+  iam_instance_profile  {
+    arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
+    # name            = "${aws_iam_instance_profile.CRBS-instace_profile.name}"
+  }
+
+  network_interfaces {
+    associate_public_ip_address = false
+    security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+
+  tags = {
+      Name = "API_template"
+    }
+  }
+}
+
+# =============================================autoscaling group=============================================
+
+# =============================================UI autoscaling group=============================================
+resource "aws_autoscaling_group" "UI-asg" {
+  name               = "UI-asg"
+  desired_capacity   = 2
+  max_size           = 4
+  min_size           = 2
+  # health_check_type         = "ELB"
+  health_check_grace_period = 300
+  vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-public-c.id}", "${aws_subnet.CRBS-subnet-public-a.id}"]
+  termination_policies      = ["default"]
+  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+  launch_template {
+    id      = "${aws_launch_template.UI-template.id}"
+    version = "$Latest"
+  }
+  tag {
+    key                 = "Name"
+    value               = "UI-asg"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "UI-asg-policy" {
+  name                   = "UI-asg-policy"
+  scaling_adjustment     = 80
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
+}
+
+# Create a new ALB Target Group attachment=============== 나중에 해야함
+# resource "aws_autoscaling_attachment" "UI-asg_attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.UI-asg.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-UI.arn}"
+# }
+
+# =============================================API autoscaling group=============================================
+resource "aws_autoscaling_group" "API-asg" {
+  name               = "API-asg"
+  desired_capacity   = 2
+  max_size           = 4
+  min_size           = 2
+  # health_check_type         = "ELB"
+  health_check_grace_period = 300
+  vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-private-c.id}", "${aws_subnet.CRBS-subnet-private-a.id}"]
+  termination_policies      = ["default"]
+  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+  launch_template {
+    id      = "${aws_launch_template.API-template.id}"
+    version = "$Latest"
+  }
+  tag {
+    key                 = "Name"
+    value               = "API-asg"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "API-asg-policy" {
+  name                   = "API-asg-policy"
+  scaling_adjustment     = 80
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
+}
+
+# Create a new ALB Target Group attachment=============== 나중에 해야함
+# resource "aws_autoscaling_attachment" "API-asg_attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.API-asg.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
+# }
+
+# ====================================================create RDS===================================================실제로는 주석해제
+
+# resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
+#   name       = "crbs-rds-subnet-group"
+#   subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
+#   description = "RDS subnet group for CRBS"
+#   tags = { Name = "crbs-rds-subnet-group" }
+# }
+
+# resource "aws_db_instance" "CRBS-rds-instance" {
+#   identifier           = "crbs-rds-instance"
+#   allocated_storage    = 20
+#   storage_type         = "gp2"
+#   engine               = "mysql"
+#   engine_version       = "8.0.19"
+#   instance_class       = "db.t2.micro"
+#   username             = var.db_username
+#   password             = var.db_password
+#   port              = var.db_port
+#   db_subnet_group_name = aws_db_subnet_group.CRBS-rds-subnet-group.name
+#   multi_az             = true
+#   vpc_security_group_ids = [aws_security_group.CRBS-security_group-private.id]
+#   skip_final_snapshot = true
+# }
