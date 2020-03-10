@@ -28,7 +28,7 @@ terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/wo
         sh '''cd /var/lib/jenkins/workspace/
 terraform output > id.txt
 sed \'s/ //g\' id.txt > newid.txt'''
-        sh '''cd /var/lib/jenkins/workspace/practice_master
+        sh '''cd /var/lib/jenkins/workspace/infra_master
 cp key.sh /var/lib/jenkins/workspace
 cp cli.sh /var/lib/jenkins/workspace
 '''
