@@ -10,16 +10,16 @@ pipeline {
     stage('Init') {
       steps {
         sh '''cd /var/lib/jenkins/workspace
-terraform init -lock=false /var/lib/jenkins/workspace/practice_master'''
+terraform init -lock=false /var/lib/jenkins/workspace/infra_master'''
       }
     }
 
     stage('Apply') {
       steps {
         sh '''cd /var/lib/jenkins/workspace
-terraform plan -lock=false -var-file=var.json /var/lib/jenkins/workspace/practice_master'''
+terraform plan -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master'''
         sh '''cd /var/lib/jenkins/workspace
-terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/practice_master'''
+terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master'''
       }
     }
 
@@ -42,6 +42,13 @@ chmod +x script.sh'''
 ./script.sh'''
         }
 
+      }
+    }
+
+    stage('Destroy') {
+      steps {
+        sh '''cd /var/lib/jenkins/workspace
+terraform destroy -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master'''
       }
     }
 
