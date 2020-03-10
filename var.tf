@@ -29,7 +29,7 @@ variable "aws_secret_key" {
 # ======================================================================
 variable "key_name" {
     type    = string
-    default = "team2Key"
+    default = "hanju"
 }
 
 variable "my_region" {
