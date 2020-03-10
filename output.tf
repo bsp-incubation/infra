@@ -14,7 +14,7 @@ output "private_subnet_c_id" {
   value="${aws_subnet.CRBS-subnet-private-c.id}"
 }
 output "igw_id" {
-  value="${aws_internet_gateway.CRBS2-igw.id}"
+  value="${aws_internet_gateway.CRBS-igw.id}"
 }
 output "nat_id" {
   value="${aws_nat_gateway.CRBS-nat.id}"
