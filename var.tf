@@ -49,7 +49,7 @@ variable "my_az2" {
 
 variable "my_az3" {
     type    = string
-    default = "ap-northeast-2"
+    default = "ap-northeast-2b"
 }
 
 variable "target_group_external_path" {
