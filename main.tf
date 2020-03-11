@@ -807,7 +807,7 @@ resource "aws_launch_template" "API-template" {
   }
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
   }
 
