@@ -36,6 +36,23 @@ resource "aws_subnet" "CRBS-subnet-private-a" {
   tags = { Name = "CRBS-private-a" }
 }
 
+# 데모 변동사항
+# resource "aws_subnet" "CRBS-subnet-public-2a" {
+#   vpc_id                    = aws_vpc.CRBS-vpc.id
+#   availability_zone         = var.my_az1
+#   cidr_block                = "172.16.5.0/24"
+#   map_public_ip_on_launch   = true
+#   tags = { Name = "CRBS-public-2a" }
+# }
+
+# resource "aws_subnet" "CRBS-subnet-private-2a" {
+#   vpc_id            = aws_vpc.CRBS-vpc.id
+#   availability_zone = var.my_az1
+#   cidr_block        = "172.16.6.0/24"
+#   map_public_ip_on_launch   = false
+#   tags = { Name = "CRBS-private-2a" }
+# }
+
 resource "aws_subnet" "CRBS-subnet-public-c" {
   vpc_id            = aws_vpc.CRBS-vpc.id
   availability_zone = var.my_az2
@@ -94,6 +111,12 @@ resource "aws_route_table_association" "CRBS-route_table_associationpublic-a" {
   route_table_id = aws_route_table.CRBS-route_table-public.id
 }
 
+# 데모 변동사항
+# resource "aws_route_table_association" "CRBS-route_table_associationpublic-2a" {
+#   subnet_id      = aws_subnet.CRBS-subnet-public-2a.id
+#   route_table_id = aws_route_table.CRBS-route_table-public.id
+# }
+
 resource "aws_route_table_association" "CRBS-route_table_associationpublic-c" {
   subnet_id      = aws_subnet.CRBS-subnet-public-c.id
   route_table_id = aws_route_table.CRBS-route_table-public.id
@@ -112,6 +135,11 @@ resource "aws_route_table_association" "CRBS-route_table_association-private-a" 
   subnet_id      = aws_subnet.CRBS-subnet-private-a.id
   route_table_id = aws_route_table.CRBS-route_table-private.id
 }
+# 데모 변동사항
+# resource "aws_route_table_association" "CRBS-route_table_association-private-2a" {
+#   subnet_id      = aws_subnet.CRBS-subnet-private-2a.id
+#   route_table_id = aws_route_table.CRBS-route_table-private.id
+# }
 resource "aws_route_table_association" "CRBS-route_table_association-private-c" {
   subnet_id      = aws_subnet.CRBS-subnet-private-c.id
   route_table_id = aws_route_table.CRBS-route_table-private.id
@@ -125,6 +153,12 @@ resource "aws_network_acl" "CRBS-acl-public" {
     aws_subnet.CRBS-subnet-public-a.id,
     aws_subnet.CRBS-subnet-public-c.id
   ]
+#   데모 변동사항
+#    subnet_ids = [
+#     aws_subnet.CRBS-subnet-public-a.id,
+#     aws_subnet.CRBS-subnet-public-2a.id,
+#     aws_subnet.CRBS-subnet-public-c.id
+#    ]
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -258,6 +292,12 @@ resource "aws_network_acl" "CRBS-acl-private" {
     aws_subnet.CRBS-subnet-private-a.id,
     aws_subnet.CRBS-subnet-private-c.id
   ]
+ #   데모 변동사항
+#   subnet_ids = [
+#     aws_subnet.CRBS-subnet-private-a.id,
+#     aws_subnet.CRBS-subnet-private-2a.id,
+#     aws_subnet.CRBS-subnet-private-c.id
+#   ]
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -615,6 +655,8 @@ resource "aws_lb" "CRBS-external" {
   load_balancer_type = "application"
   security_groups = [aws_security_group.CRBS-security_group-public.id]
   subnets = [aws_subnet.CRBS-subnet-public-a.id, aws_subnet.CRBS-subnet-public-c.id]
+#    데모 변동사항
+#   subnets = [aws_subnet.CRBS-subnet-public-a.id, aws_subnet.CRBS-subnet-public-2a.id, aws_subnet.CRBS-subnet-public-c.id]
   enable_deletion_protection = false
   tags = { Name = "CRBS-external" }
 }
@@ -670,6 +712,8 @@ resource "aws_lb" "CRBS-internal" {
   load_balancer_type = "application"
   security_groups = [aws_security_group.CRBS-security_group-public.id]
   subnets = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
+   #    데모 변동사항
+#   subnets = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-2a.id, aws_subnet.CRBS-subnet-private-c.id]
   enable_deletion_protection = false
   tags = { Name = "CRBS-internal" }
 }
@@ -831,6 +875,9 @@ resource "aws_autoscaling_group" "UI-asg" {
   # health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-public-c.id}", "${aws_subnet.CRBS-subnet-public-a.id}"]
+#   데모 변동사항
+#   vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-public-c.id}", "${aws_subnet.CRBS-subnet-public-2a.id}", "${aws_subnet.CRBS-subnet-public-a.id}"]
+    
   termination_policies      = ["default"]
   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
   launch_template {
@@ -867,6 +914,8 @@ resource "aws_autoscaling_group" "API-asg" {
   # health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-private-c.id}", "${aws_subnet.CRBS-subnet-private-a.id}"]
+#   데모 변동사항
+#   vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-private-c.id}", "${aws_subnet.CRBS-subnet-private-2a.id}", "${aws_subnet.CRBS-subnet-private-a.id}"]
   termination_policies      = ["default"]
   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
   launch_template {
@@ -899,6 +948,10 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 # resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
 #   name       = "crbs-rds-subnet-group"
 #   subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
+
+# 데모 변동사항
+#   subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-2a.id, aws_subnet.CRBS-subnet-private-c.id]
+
 #   description = "RDS subnet group for CRBS"
 #   tags = { Name = "crbs-rds-subnet-group" }
 # }
