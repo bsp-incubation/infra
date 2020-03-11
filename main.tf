@@ -428,25 +428,25 @@ resource "aws_security_group" "CRBS-security_group-public" {
     protocol  = "tcp"
     from_port = 80
     to_port   = 80
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
     protocol  = "tcp"
     from_port = 8080
     to_port   = 8080
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
     protocol  = "tcp"
     from_port = 22
     to_port   = 22
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
     protocol  = "tcp"
     from_port = 443
     to_port   = 443
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
     protocol   = "icmp"
@@ -459,25 +459,25 @@ resource "aws_security_group" "CRBS-security_group-public" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   egress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   egress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   egress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   egress {
     protocol   = "icmp"
@@ -605,47 +605,68 @@ data "aws_ami" "API-ami" {
   owners = ["144149479695"] 
 }
 
-# ====================================================create server===================================================
+# ================================================Load Balancer===================================================
+# load_balancer-security_group
+resource "aws_security_group" "CRBS-external-security_group-public" {
+  name        = "CRBS-external-load_balancer"
+  description = "security_group for load_balancer"
+  vpc_id = "${aws_vpc.CRBS-vpc.id}"
 
-# CRBS-public UI 인스턴스 설정
-# resource "aws_instance" "CRBS-public-a" {
-#   instance_type               = "t2.micro"
-#   ami                         = data.aws_ami.UI-ami.id
-#   key_name                    = var.key_name
-#   vpc_security_group_ids      = [aws_security_group.CRBS-security_group-public.id]
-#   subnet_id                   = aws_subnet.CRBS-subnet-public-a.id
-#   associate_public_ip_address = true
-#   tags = { Name="CRBS-public-a" }
-# }
+  ingress {
+    protocol  = "tcp"
+    from_port = 80
+    to_port   = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    protocol  = "tcp"
+    from_port = 8080
+    to_port   = 8080
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    protocol  = "tcp"
+    from_port = 22
+    to_port   = 22
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    protocol  = "tcp"
+    from_port = 443
+    to_port   = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-# resource "aws_instance" "CRBS-public-c" {
-#   instance_type             = "t2.micro"
-#   ami                     = data.aws_ami.UI-ami.id
-#   key_name                = var.key_name
-#   vpc_security_group_ids  = [aws_security_group.CRBS-security_group-public.id]
-#   subnet_id               = aws_subnet.CRBS-subnet-public-c.id
-#   associate_public_ip_address = true
-#   tags = { Name = "CRBS-public-c" }
-# }
 
-# CRBS-public API 인스턴스 설정
-# resource "aws_instance" "CRBS-private-a" {
-#   instance_type               = "t2.micro"
-#   ami                         = data.aws_ami.API-ami.id
-#   key_name                    = var.key_name
-#   vpc_security_group_ids      = [aws_security_group.CRBS-security_group-private.id]
-#   subnet_id                   = aws_subnet.CRBS-subnet-private-a.id
-#   tags = { Name="CRBS-private-a" }
-# }
+  egress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-# resource "aws_instance" "CRBS-private-c" {
-#   instance_type             = "t2.micro"
-#   ami                     = data.aws_ami.API-ami.id
-#   key_name                = var.key_name
-#   vpc_security_group_ids  = [aws_security_group.CRBS-security_group-private.id]
-#   subnet_id               = aws_subnet.CRBS-subnet-private-c.id
-#   tags = { Name = "CRBS-private-c" }
-# }
+  tags = {
+    Name = "CRBS-external-load_balancer"
+  }
+}
 
 # External alb 설정
 resource "aws_lb" "CRBS-external" {
@@ -653,10 +674,16 @@ resource "aws_lb" "CRBS-external" {
   internal        = false
   idle_timeout    = "300"
   load_balancer_type = "application"
-  security_groups = [aws_security_group.CRBS-security_group-public.id]
-  subnets = [aws_subnet.CRBS-subnet-public-a.id, aws_subnet.CRBS-subnet-public-c.id]
+  security_groups = [aws_security_group.CRBS-external-security_group-public.id]
+  subnets = [
+    aws_subnet.CRBS-subnet-public-a.id, 
+    aws_subnet.CRBS-subnet-public-c.id
+    ]
 #    데모 변동사항
-#   subnets = [aws_subnet.CRBS-subnet-public-a.id, aws_subnet.CRBS-subnet-public-2a.id, aws_subnet.CRBS-subnet-public-c.id]
+  # subnets = [
+  #   aws_subnet.CRBS-subnet-public-2a.id, 
+  #   aws_subnet.CRBS-subnet-public-c.id
+  #   ]
   enable_deletion_protection = false
   tags = { Name = "CRBS-external" }
 }
@@ -711,9 +738,15 @@ resource "aws_lb" "CRBS-internal" {
   idle_timeout    = "300"
   load_balancer_type = "application"
   security_groups = [aws_security_group.CRBS-security_group-public.id]
-  subnets = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
-   #    데모 변동사항
-#   subnets = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-2a.id, aws_subnet.CRBS-subnet-private-c.id]
+  subnets = [
+    aws_subnet.CRBS-subnet-private-a.id, 
+    aws_subnet.CRBS-subnet-private-c.id
+    ]
+#    데모 변동사항
+  # subnets = [
+  #   aws_subnet.CRBS-subnet-private-2a.id, 
+  #   aws_subnet.CRBS-subnet-private-c.id
+  #   ]
   enable_deletion_protection = false
   tags = { Name = "CRBS-internal" }
 }
@@ -822,7 +855,6 @@ resource "aws_launch_template" "UI-template" {
 
   iam_instance_profile  {
     arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
-    # name            = "${aws_iam_instance_profile.CRBS-instace_profile.name}"
   }
 
   network_interfaces {
@@ -847,7 +879,6 @@ resource "aws_launch_template" "API-template" {
 
   iam_instance_profile  {
     arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
-    # name            = "${aws_iam_instance_profile.CRBS-instace_profile.name}"
   }
 
   network_interfaces {
@@ -874,9 +905,10 @@ resource "aws_autoscaling_group" "UI-asg" {
   min_size           = 2
   # health_check_type         = "ELB"
   health_check_grace_period = 300
-  vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-public-c.id}", "${aws_subnet.CRBS-subnet-public-a.id}"]
-#   데모 변동사항
-#   vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-public-c.id}", "${aws_subnet.CRBS-subnet-public-2a.id}", "${aws_subnet.CRBS-subnet-public-a.id}"]
+  vpc_zone_identifier       = [
+    "${aws_subnet.CRBS-subnet-public-c.id}", 
+    "${aws_subnet.CRBS-subnet-public-a.id}"
+    ]
     
   termination_policies      = ["default"]
   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
@@ -913,9 +945,10 @@ resource "aws_autoscaling_group" "API-asg" {
   min_size           = 2
   # health_check_type         = "ELB"
   health_check_grace_period = 300
-  vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-private-c.id}", "${aws_subnet.CRBS-subnet-private-a.id}"]
-#   데모 변동사항
-#   vpc_zone_identifier       = ["${aws_subnet.CRBS-subnet-private-c.id}", "${aws_subnet.CRBS-subnet-private-2a.id}", "${aws_subnet.CRBS-subnet-private-a.id}"]
+  vpc_zone_identifier       = [
+    "${aws_subnet.CRBS-subnet-private-c.id}", 
+    "${aws_subnet.CRBS-subnet-private-a.id}"
+    ]
   termination_policies      = ["default"]
   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
   launch_template {
@@ -943,7 +976,7 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 #   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
 # }
 
-# ====================================================create RDS===================================================실제로는 주석해제
+# ====================================================create RDS===================================================실제로는 주석해제 good
 
 # resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
 #   name       = "crbs-rds-subnet-group"
@@ -970,4 +1003,85 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 #   multi_az             = true
 #   vpc_security_group_ids = [aws_security_group.CRBS-security_group-private.id]
 #   skip_final_snapshot = true
+# }
+
+
+# ====================================데모 변동사항 new-UI autoscaling group=====================================
+# resource "aws_autoscaling_group" "new-UI-asg" {
+#   name               = "new-UI-asg"
+#   desired_capacity   = 2
+#   max_size           = 4
+#   min_size           = 2
+#   # health_check_type         = "ELB"
+#   health_check_grace_period = 300
+
+#   vpc_zone_identifier       = [
+#     "${aws_subnet.CRBS-subnet-public-c.id}", 
+#     "${aws_subnet.CRBS-subnet-public-2a.id}"
+#     ]
+#   termination_policies      = ["default"]
+#   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+#   launch_template {
+#     id      = "${aws_launch_template.UI-template.id}"
+#     version = "$Latest"
+#   }
+#   tag {
+#     key                 = "Name"
+#     value               = "new-UI-asg"
+#     propagate_at_launch = true
+#   }
+# }
+
+# resource "aws_autoscaling_policy" "new-UI-asg-policy" {
+#   name                   = "new-UI-asg-policy"
+#   scaling_adjustment     = 80
+#   adjustment_type        = "ChangeInCapacity"
+#   cooldown               = 300
+#   autoscaling_group_name = "${aws_autoscaling_group.new-UI-asg.name}"
+# }
+
+# Create a new ALB Target Group attachment=============== 나중에 해야함
+# resource "aws_autoscaling_attachment" "new-UI-asg_attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.new-UI-asg.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-UI.arn}"
+# }
+
+# =============================================데모 변동사항 new-API autoscaling group=============================================
+# resource "aws_autoscaling_group" "new-API-asg" {
+#   name               = "new-API-asg"
+#   desired_capacity   = 2
+#   max_size           = 4
+#   min_size           = 2
+#   # health_check_type         = "ELB"
+#   health_check_grace_period = 300
+
+#   vpc_zone_identifier       = [
+#     "${aws_subnet.CRBS-subnet-private-c.id}", 
+#     "${aws_subnet.CRBS-subnet-private-2a.id}"
+#     ]
+#   termination_policies      = ["default"]
+#   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+#   launch_template {
+#     id      = "${aws_launch_template.UI-template.id}"
+#     version = "$Latest"
+#   }
+#   tag {
+#     key                 = "Name"
+#     value               = "new-API-asg"
+#     propagate_at_launch = true
+#   }
+# }
+
+# resource "aws_autoscaling_policy" "new-API-asg-policy" {
+#   name                   = "new-API-asg-policy"
+#   scaling_adjustment     = 80
+#   adjustment_type        = "ChangeInCapacity"
+#   cooldown               = 300
+#   autoscaling_group_name = "${aws_autoscaling_group.new-API-asg.name}"
+# }
+
+# Create a new ALB Target Group attachment=============== 나중에 해야함
+# resource "aws_autoscaling_attachment" "new-API-asg_attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.new-API-asg.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
 # }
