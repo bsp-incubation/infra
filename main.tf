@@ -695,6 +695,14 @@ resource "aws_lb_target_group" "CRBS-UI" {
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
+
+# =============================================변경 사항============================================
+  stickiness {
+    type                = "lb_cookie"
+    cookie_duration     = 600
+    enabled             = "true"
+  }
+
   health_check {
     healthy_threshold   = 10
     unhealthy_threshold = 2
