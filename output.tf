@@ -17,7 +17,7 @@ output "igw_id" {
   value="${aws_internet_gateway.CRBS-igw.id}"
 }
 output "nat_id" {
-  value="${aws_nat_gateway.CRBS-nat.id}"
+  value="${aws_nat_gateway.CRBS-natgateway.id}"
 }
 output "route_table_public_id" {
   value="${aws_route_table.CRBS-route_table-public.id}"
@@ -33,11 +33,11 @@ output "security_group_private_id" {
 }
 
 output "CRBS2_external_dns_name" {
-  value="${aws_lb.CRBS2-external.dns_name}"
+  value="${aws_lb.CRBS-external.dns_name}"
 }
 
 output "CRBS2_internal_dns_name" {
-  value="${aws_lb.CRBS2-internal.dns_name}"
+  value="${aws_lb.CRBS-internal.dns_name}"
 }
 
 
