@@ -9,8 +9,8 @@ aws ec2 describe-route-tables --filters "Name=route-table-id,Values=$route_table
 aws ec2 describe-route-tables --filters "Name=route-table-id,Values=$route_table_private_id" --query 'RouteTables[*].[Tags][*][*][0].Value'
 aws ec2 describe-security-groups --filters "Name=group-id,Values=$security_group_public_id" --query 'SecurityGroups[*].[Tags][*][*][0].Value'
 aws ec2 describe-security-groups --filters "Name=group-id,Values=$security_group_private_id" --query 'SecurityGroups[*].[Tags][*][*][0].Value'
-aws elbv2 describe-load-balancers --names CRBS_external
-aws elbv2 describe-load-balancers --names CRBS_internal
+aws elbv2 describe-load-balancers --names CRBS-external
+aws elbv2 describe-load-balancers --names CRBS-internal
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$UI_asg"
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$API_asg"
 # aws ec2 describe-db-instances --filters "Name=db-instance-id,Values=$CRBS2_rds_instance_id" --query 'SecurityGroups[*].[DBInstanceIdentifier][*]'
