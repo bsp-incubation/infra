@@ -1109,7 +1109,14 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
       action                           = "TERMINATE"
       termination_wait_time_in_minutes = 5
     }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+      autoscaling_groups                = ["$aws_autoscaling_group.UI-asg.name"]
+    }
+
   }
+
+  
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
@@ -1141,6 +1148,10 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
     terminate_blue_instances_on_deployment_success {
       action                           = "TERMINATE"
       termination_wait_time_in_minutes = 5
+    }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+      autoscaling_groups                = ["$aws_autoscaling_group.API-asg.name"]
     }
   }
 
