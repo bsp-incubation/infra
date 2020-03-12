@@ -1100,6 +1100,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "CRBS-UI-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups                = [aws_autoscaling_group.UI-asg.name]
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1113,7 +1114,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
       action                            = "COPY_AUTO_SCALING_GROUP"
       
     }
-    autoscaling_groups                = ["$aws_autoscaling_group.UI-asg.name"]
+    
   }
 
   
@@ -1140,6 +1141,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "CRBS-API-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1153,7 +1155,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
       action                            = "COPY_AUTO_SCALING_GROUP"
       
     }
-    autoscaling_groups                = ["$aws_autoscaling_group.API-asg.name"]
+    
   }
 
   deployment_style {
