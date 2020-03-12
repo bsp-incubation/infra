@@ -681,7 +681,7 @@ resource "aws_lb" "CRBS-external" {
     ]
 #    데모 변동사항
   # subnets = [
-  #   aws_subnet.CRBS-subnet-public-2a.id,
+  #   aws_subnet.CRBS-subnet-public-2a.id, 
   #   aws_subnet.CRBS-subnet-public-c.id
   #   ]
   enable_deletion_protection = false
@@ -747,12 +747,12 @@ resource "aws_lb" "CRBS-internal" {
   load_balancer_type = "application"
   security_groups = [aws_security_group.CRBS-security_group-public.id]
   subnets = [
-    aws_subnet.CRBS-subnet-private-a.id,
+    aws_subnet.CRBS-subnet-private-a.id, 
     aws_subnet.CRBS-subnet-private-c.id
     ]
 #    데모 변동사항
   # subnets = [
-  #   aws_subnet.CRBS-subnet-private-2a.id,
+  #   aws_subnet.CRBS-subnet-private-2a.id, 
   #   aws_subnet.CRBS-subnet-private-c.id
   #   ]
   enable_deletion_protection = false
@@ -914,7 +914,7 @@ resource "aws_autoscaling_group" "UI-asg" {
   # health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-public-c.id}",
+    "${aws_subnet.CRBS-subnet-public-c.id}", 
     "${aws_subnet.CRBS-subnet-public-a.id}"
     ]
 
@@ -954,7 +954,7 @@ resource "aws_autoscaling_group" "API-asg" {
   # health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-private-c.id}",
+    "${aws_subnet.CRBS-subnet-private-c.id}", 
     "${aws_subnet.CRBS-subnet-private-a.id}"
     ]
   termination_policies      = ["default"]
@@ -1024,7 +1024,7 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 #   health_check_grace_period = 300
 
 #   vpc_zone_identifier       = [
-#     "${aws_subnet.CRBS-subnet-public-c.id}",
+#     "${aws_subnet.CRBS-subnet-public-c.id}", 
 #     "${aws_subnet.CRBS-subnet-public-2a.id}"
 #     ]
 #   termination_policies      = ["default"]
@@ -1064,7 +1064,7 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 #   health_check_grace_period = 300
 
 #   vpc_zone_identifier       = [
-#     "${aws_subnet.CRBS-subnet-private-c.id}",
+#     "${aws_subnet.CRBS-subnet-private-c.id}", 
 #     "${aws_subnet.CRBS-subnet-private-2a.id}"
 #     ]
 #   termination_policies      = ["default"]
@@ -1094,6 +1094,7 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 #   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
 # }
 
+
 resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
   name = "CRBS-codedeploy-app"
 }
@@ -1102,7 +1103,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "deployment-group"
-  service_role_arn      = aws_iam_role.CRBS-instace_role
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1132,7 +1133,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "deployment-group"
-  service_role_arn      = aws_iam_role.CRBS-instace_role
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1157,3 +1158,4 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
     }
   }
 }
+
