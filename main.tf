@@ -1098,7 +1098,7 @@ resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
 resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "deployment-group"
+  deployment_group_name = "CRBS-UI-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
 
   blue_green_deployment_config {
@@ -1131,7 +1131,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
 resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "deployment-group"
+  deployment_group_name = "CRBS-API-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
 
   blue_green_deployment_config {
