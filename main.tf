@@ -998,7 +998,7 @@ resource "aws_db_instance" "CRBS-rds-instance" {
   allocated_storage    = 20
   storage_type         = "gp2"
   engine               = "mysql"
-  engine_version       = "8.0.19"
+  engine_version       = "8.0.17"
   instance_class       = "db.t2.micro"
   username             = var.db_username
   password             = var.db_password
