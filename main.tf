@@ -1111,7 +1111,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
     }
     green_fleet_provisioning_option {
       action                            = "COPY_AUTO_SCALING_GROUP"
-      autoscaling_groups                = ["$aws_autoscaling_group.UI-asg.name"]
+      autoscaling_group                = "$aws_autoscaling_group.UI-asg.name"
     }
 
   }
@@ -1151,7 +1151,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
     }
     green_fleet_provisioning_option {
       action                            = "COPY_AUTO_SCALING_GROUP"
-      autoscaling_groups                = ["$aws_autoscaling_group.API-asg.name"]
+      autoscaling_group                = "$aws_autoscaling_group.API-asg.name"
     }
   }
 
