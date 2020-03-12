@@ -1117,13 +1117,13 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   }
 
   load_balancer_info {
-    target_group_pair_info {
-      prod_traffic_route {
-        listener_arns = ["${aws_lb_listener.CRBS-UI-listener.arn}"]
-      }
-      target_group {
-        name = "${aws_lb_target_group.CRBS-UI.name}"
-      }
+    target_group_info {
+#       prod_traffic_route {
+#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+#       }
+#       target_group {
+        name = "${aws_lb_target_group.CRBS-API.name}"
+#       }
     }
   }
 }
@@ -1150,13 +1150,13 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   }
 
   load_balancer_info {
-    target_group_pair_info {
-      prod_traffic_route {
-        listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
-      }
-      target_group {
+    target_group_info {
+#       prod_traffic_route {
+#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+#       }
+#       target_group {
         name = "${aws_lb_target_group.CRBS-API.name}"
-      }
+#       }
     }
   }
 }
