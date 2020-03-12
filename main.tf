@@ -906,38 +906,38 @@ resource "aws_launch_template" "API-template" {
 # =============================================autoscaling group=============================================
 
 # =============================================UI autoscaling group=============================================
-resource "aws_autoscaling_group" "UI-asg" {
-  name               = "UI-asg"
-  desired_capacity   = 2
-  max_size           = 4
-  min_size           = 2
-  # health_check_type         = "ELB"
-  health_check_grace_period = 300
-  vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-public-c.id}", 
-    "${aws_subnet.CRBS-subnet-public-a.id}"
-    ]
+# resource "aws_autoscaling_group" "UI-asg" {
+#   name               = "UI-asg"
+#   desired_capacity   = 2
+#   max_size           = 4
+#   min_size           = 2
+#   # health_check_type         = "ELB"
+#   health_check_grace_period = 300
+#   vpc_zone_identifier       = [
+#     "${aws_subnet.CRBS-subnet-public-c.id}", 
+#     "${aws_subnet.CRBS-subnet-public-a.id}"
+#     ]
 
-  termination_policies      = ["default"]
-  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
-  launch_template {
-    id      = "${aws_launch_template.UI-template.id}"
-    version = "$Latest"
-  }
-  tag {
-    key                 = "Name"
-    value               = "UI-asg"
-    propagate_at_launch = true
-  }
-}
+#   termination_policies      = ["default"]
+#   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+#   launch_template {
+#     id      = "${aws_launch_template.UI-template.id}"
+#     version = "$Latest"
+#   }
+#   tag {
+#     key                 = "Name"
+#     value               = "UI-asg"
+#     propagate_at_launch = true
+#   }
+# }
 
-resource "aws_autoscaling_policy" "UI-asg-policy" {
-  name                   = "UI-asg-policy"
-  scaling_adjustment     = 80
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
-}
+# resource "aws_autoscaling_policy" "UI-asg-policy" {
+#   name                   = "UI-asg-policy"
+#   scaling_adjustment     = 80
+#   adjustment_type        = "ChangeInCapacity"
+#   cooldown               = 300
+#   autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
+# }
 
 # Create a new ALB Target Group attachment=============== 나중에 해야함
 # resource "aws_autoscaling_attachment" "UI-asg_attachment" {
@@ -946,37 +946,37 @@ resource "aws_autoscaling_policy" "UI-asg-policy" {
 # }
 
 # =============================================API autoscaling group=============================================
-resource "aws_autoscaling_group" "API-asg" {
-  name               = "API-asg"
-  desired_capacity   = 2
-  max_size           = 4
-  min_size           = 2
-  # health_check_type         = "ELB"
-  health_check_grace_period = 300
-  vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-private-c.id}", 
-    "${aws_subnet.CRBS-subnet-private-a.id}"
-    ]
-  termination_policies      = ["default"]
-  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
-  launch_template {
-    id      = "${aws_launch_template.API-template.id}"
-    version = "$Latest"
-  }
-  tag {
-    key                 = "Name"
-    value               = "API-asg"
-    propagate_at_launch = true
-  }
-}
+# resource "aws_autoscaling_group" "API-asg" {
+#   name               = "API-asg"
+#   desired_capacity   = 2
+#   max_size           = 4
+#   min_size           = 2
+#   # health_check_type         = "ELB"
+#   health_check_grace_period = 300
+#   vpc_zone_identifier       = [
+#     "${aws_subnet.CRBS-subnet-private-c.id}", 
+#     "${aws_subnet.CRBS-subnet-private-a.id}"
+#     ]
+#   termination_policies      = ["default"]
+#   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+#   launch_template {
+#     id      = "${aws_launch_template.API-template.id}"
+#     version = "$Latest"
+#   }
+#   tag {
+#     key                 = "Name"
+#     value               = "API-asg"
+#     propagate_at_launch = true
+#   }
+# }
 
-resource "aws_autoscaling_policy" "API-asg-policy" {
-  name                   = "API-asg-policy"
-  scaling_adjustment     = 80
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
-}
+# resource "aws_autoscaling_policy" "API-asg-policy" {
+#   name                   = "API-asg-policy"
+#   scaling_adjustment     = 80
+#   adjustment_type        = "ChangeInCapacity"
+#   cooldown               = 300
+#   autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
+# }
 
 # Create a new ALB Target Group attachment=============== 나중에 해야함
 # resource "aws_autoscaling_attachment" "API-asg_attachment" {
