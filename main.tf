@@ -85,11 +85,11 @@ resource "aws_eip" "CRBS-eip" {
 }
 
 # NAT Gateway
-resource "aws_nat_gateway" "CRBS-nat" {
+resource "aws_nat_gateway" "CRBS-natgateway" {
   allocation_id = aws_eip.CRBS-eip.id
   subnet_id     = aws_subnet.CRBS-subnet-public-a.id
   depends_on        = [aws_internet_gateway.CRBS-igw]
-  tags = { Name = "CRBS-nat" }
+  tags = { Name = "CRBS-natgateway" }
 }
 
 # NAT도 IGW처럼 한개를 공유해서 사용하는지, 아니면 AZ별로 각각 NAT를 생성해야 하나 의문이 생겼었는데
@@ -126,7 +126,7 @@ resource "aws_route_table" "CRBS-route_table-private" {
   vpc_id = aws_vpc.CRBS-vpc.id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.CRBS-nat.id
+    nat_gateway_id = aws_nat_gateway.CRBS-natgateway.id
   }
   tags = { Name = "CRBS-private" }
 }
