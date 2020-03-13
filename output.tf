@@ -50,11 +50,11 @@ output "API_asg" {
 }
 
 output "CRBS2_rds_instance_address" {
-  value="${aws_db_instance.CRBS2-rds-instance.address}"
+  value="${aws_db_instance.CRBS-rds-instance.address}"
 }
 
 output "CRBS2_rds_instance_id" {
-  value="${aws_db_instance.CRBS2-rds-instance.id}"
+  value="${aws_db_instance.CRBS-rds-instance.id}"
 }
 
 
