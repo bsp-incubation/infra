@@ -151,7 +151,10 @@ resource "aws_network_acl" "CRBS-acl-public" {
   vpc_id = aws_vpc.CRBS-vpc.id
   subnet_ids = [
     aws_subnet.CRBS-subnet-public-a.id,
-    aws_subnet.CRBS-subnet-public-c.id
+    aws_subnet.CRBS-subnet-public-c.id,
+    aws_subnet.CRBS-subnet-private-a.id,
+    aws_subnet.CRBS-subnet-private-c.id
+
   ]
 #   데모 변동사항
 #    subnet_ids = [
@@ -286,138 +289,138 @@ resource "aws_network_acl" "CRBS-acl-public" {
   tags = { Name = "CRBS-public" }
 }
 
-resource "aws_network_acl" "CRBS-acl-private" {
-  vpc_id = aws_vpc.CRBS-vpc.id
-  subnet_ids = [
-    aws_subnet.CRBS-subnet-private-a.id,
-    aws_subnet.CRBS-subnet-private-c.id
-  ]
- #   데모 변동사항
+# resource "aws_network_acl" "CRBS-acl-private" {
+#   vpc_id = aws_vpc.CRBS-vpc.id
 #   subnet_ids = [
 #     aws_subnet.CRBS-subnet-private-a.id,
-#     aws_subnet.CRBS-subnet-private-2a.id,
 #     aws_subnet.CRBS-subnet-private-c.id
 #   ]
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 22
-    to_port    = 22
-  }
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 110
-    action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 80
-    to_port    = 80
-  }
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 120
-    action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 3306
-    to_port    = 3306
-  }
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 130
-    action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 8080
-    to_port    = 8080
-  }
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 140
-    action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 1024
-    to_port    = 65535
-  }
-  ingress {
-    protocol   = "icmp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = "-1"
-    to_port    = "-1"
-    icmp_type = -1
-    icmp_code = -1
-    # description = "for ping test"
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 110
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 443
-    to_port    = 443
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 120
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 22
-    to_port    = 22
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 130
-    action     = "allow"
-    cidr_block = "172.16.1.0/24"
-    from_port  = 1024
-    to_port    = 65535
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 131
-    action     = "allow"
-    cidr_block = "172.16.2.0/24"
-    from_port  = 1024
-    to_port    = 65535
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 140
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 8080
-    to_port    = 8080
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 150
-    action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 3306
-    to_port    = 3306
-  }
-  egress {
-    protocol   = "icmp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = "-1"
-    to_port    = "-1"
-    icmp_type = -1
-    icmp_code = -1
-    # description = "for ping test"
-  }
-  tags = { Name = "CRBS-private" }
-}
+#  #   데모 변동사항
+# #   subnet_ids = [
+# #     aws_subnet.CRBS-subnet-private-a.id,
+# #     aws_subnet.CRBS-subnet-private-2a.id,
+# #     aws_subnet.CRBS-subnet-private-c.id
+# #   ]
+#   ingress {
+#     protocol   = "tcp"
+#     rule_no    = 100
+#     action     = "allow"
+#     cidr_block = "172.16.0.0/16"
+#     from_port  = 22
+#     to_port    = 22
+#   }
+#   ingress {
+#     protocol   = "tcp"
+#     rule_no    = 110
+#     action     = "allow"
+#     cidr_block = "172.16.0.0/16"
+#     from_port  = 80
+#     to_port    = 80
+#   }
+#   ingress {
+#     protocol   = "tcp"
+#     rule_no    = 120
+#     action     = "allow"
+#     cidr_block = "172.16.0.0/16"
+#     from_port  = 3306
+#     to_port    = 3306
+#   }
+#   ingress {
+#     protocol   = "tcp"
+#     rule_no    = 130
+#     action     = "allow"
+#     cidr_block = "172.16.0.0/16"
+#     from_port  = 8080
+#     to_port    = 8080
+#   }
+#   ingress {
+#     protocol   = "tcp"
+#     rule_no    = 140
+#     action     = "allow"
+#     cidr_block = "172.16.0.0/16"
+#     from_port  = 1024
+#     to_port    = 65535
+#   }
+#   ingress {
+#     protocol   = "icmp"
+#     rule_no    = 200
+#     action     = "allow"
+#     cidr_block = "0.0.0.0/0"
+#     from_port  = "-1"
+#     to_port    = "-1"
+#     icmp_type = -1
+#     icmp_code = -1
+#     # description = "for ping test"
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 100
+#     action     = "allow"
+#     cidr_block = "0.0.0.0/0"
+#     from_port  = 80
+#     to_port    = 80
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 110
+#     action     = "allow"
+#     cidr_block = "0.0.0.0/0"
+#     from_port  = 443
+#     to_port    = 443
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 120
+#     action     = "allow"
+#     cidr_block = "0.0.0.0/0"
+#     from_port  = 22
+#     to_port    = 22
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 130
+#     action     = "allow"
+#     cidr_block = "172.16.1.0/24"
+#     from_port  = 1024
+#     to_port    = 65535
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 131
+#     action     = "allow"
+#     cidr_block = "172.16.2.0/24"
+#     from_port  = 1024
+#     to_port    = 65535
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 140
+#     action     = "allow"
+#     cidr_block = "0.0.0.0/0"
+#     from_port  = 8080
+#     to_port    = 8080
+#   }
+#   egress {
+#     protocol   = "tcp"
+#     rule_no    = 150
+#     action     = "allow"
+#     cidr_block = "172.16.0.0/16"
+#     from_port  = 3306
+#     to_port    = 3306
+#   }
+#   egress {
+#     protocol   = "icmp"
+#     rule_no    = 200
+#     action     = "allow"
+#     cidr_block = "0.0.0.0/0"
+#     from_port  = "-1"
+#     to_port    = "-1"
+#     icmp_type = -1
+#     icmp_code = -1
+#     # description = "for ping test"
+#   }
+#   tags = { Name = "CRBS-private" }
+# }
 
 # 보안 그룹
 resource "aws_security_group" "CRBS-security_group-public" {
@@ -434,6 +437,12 @@ resource "aws_security_group" "CRBS-security_group-public" {
     protocol  = "tcp"
     from_port = 8080
     to_port   = 8080
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
+    protocol  = "tcp"
+    from_port = 8090
+    to_port   = 8090
     cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
@@ -459,25 +468,31 @@ resource "aws_security_group" "CRBS-security_group-public" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["172.16.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["172.16.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 8090
+    to_port     = 8090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.16.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["172.16.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     protocol   = "icmp"
@@ -497,13 +512,25 @@ resource "aws_security_group" "CRBS-security_group-private" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.16.1.0/24"]
+    cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
-    from_port   = 22
-    to_port     = 22
+    from_port   = 8090
+    to_port     = 8090
     protocol    = "tcp"
-    cidr_blocks = ["172.16.2.0/24"]
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
     protocol   = "icmp"
@@ -521,6 +548,18 @@ resource "aws_security_group" "CRBS-security_group-private" {
   egress {
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 8090
+    to_port     = 8090
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -543,14 +582,14 @@ resource "aws_security_group_rule" "public-egress-MySQL" {
   security_group_id = aws_security_group.CRBS-security_group-public.id
 }
 
-resource "aws_security_group_rule" "private-ingress-HTTP" {
-  type            = "ingress"
-  from_port       = 80
-  to_port         = 80
-  protocol        = "tcp"
-  source_security_group_id = aws_security_group.CRBS-security_group-public.id
-  security_group_id = aws_security_group.CRBS-security_group-private.id
-}
+# resource "aws_security_group_rule" "private-ingress-HTTP" {
+#   type            = "ingress"
+#   from_port       = 80
+#   to_port         = 80
+#   protocol        = "tcp"
+#   source_security_group_id = aws_security_group.CRBS-security_group-public.id
+#   security_group_id = aws_security_group.CRBS-security_group-private.id
+# }
 
 resource "aws_security_group_rule" "private-ingress-MySQL" {
   type            = "ingress"
@@ -561,14 +600,14 @@ resource "aws_security_group_rule" "private-ingress-MySQL" {
   security_group_id = aws_security_group.CRBS-security_group-private.id
 }
 
-resource "aws_security_group_rule" "private-ingress-HTTPS" {
-  type            = "ingress"
-  from_port       = 443
-  to_port         = 443
-  protocol        = "tcp"
-  source_security_group_id = aws_security_group.CRBS-security_group-public.id
-  security_group_id = aws_security_group.CRBS-security_group-private.id
-}
+# resource "aws_security_group_rule" "private-ingress-HTTPS" {
+#   type            = "ingress"
+#   from_port       = 443
+#   to_port         = 443
+#   protocol        = "tcp"
+#   source_security_group_id = aws_security_group.CRBS-security_group-public.id
+#   security_group_id = aws_security_group.CRBS-security_group-private.id
+# }
 
 resource "aws_security_group_rule" "private-egress-MySQL" {
   type            = "egress"
@@ -691,7 +730,7 @@ resource "aws_lb" "CRBS-external" {
 # External alb target group 설정
 resource "aws_lb_target_group" "CRBS-UI" {
   name     = "CRBS-UI"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
@@ -709,7 +748,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
     timeout             = 5
     path                = var.target_group_external_path
     interval            = 10
-    port                = 80
+    port                = 8080
   }
   tags = { Name = "CRBS-UI" }
 }
@@ -717,7 +756,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
 # External listener
 resource "aws_lb_listener" "CRBS-UI-listener" {
   load_balancer_arn = aws_lb.CRBS-external.arn
-  port              = "80"
+  port              = "8080"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
@@ -762,7 +801,7 @@ resource "aws_lb" "CRBS-internal" {
 # Internal alb target group 설정
 resource "aws_lb_target_group" "CRBS-API" {
   name     = "CRBS-API"
-  port     = 80
+  port     = 8090
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
@@ -772,7 +811,7 @@ resource "aws_lb_target_group" "CRBS-API" {
     timeout             = 5
     path                = var.target_group_internal_path
     interval            = 10
-    port                = 80
+    port                = 8090
   }
   tags = { Name = "CRBS-API" }
 }
@@ -780,7 +819,7 @@ resource "aws_lb_target_group" "CRBS-API" {
 # Internal listener
 resource "aws_lb_listener" "CRBS-API-listener" {
   load_balancer_arn = aws_lb.CRBS-internal.arn
-  port              = "80"
+  port              = "8090"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
@@ -854,7 +893,7 @@ resource "aws_iam_instance_profile" "CRBS-instace_profile" {
 
 # =========================================================aws_launch_template========================================================= #
 
-# aws_launch_template
+# # aws_launch_template
 resource "aws_launch_template" "UI-template" {
   name = "UI_template"
   image_id = "${data.aws_ami.UI-ami.id}"
@@ -890,7 +929,7 @@ resource "aws_launch_template" "API-template" {
   }
 
   network_interfaces {
-    associate_public_ip_address = true
+    # associate_public_ip_address = true
     security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
   }
 
@@ -926,7 +965,7 @@ resource "aws_autoscaling_group" "UI-asg" {
   }
   tag {
     key                 = "Name"
-    value               = "UI-asg"
+    value               = "UI-asg2"
     propagate_at_launch = true
   }
 }
@@ -965,7 +1004,7 @@ resource "aws_autoscaling_group" "API-asg" {
   }
   tag {
     key                 = "Name"
-    value               = "API-asg"
+    value               = "API-asg2"
     propagate_at_launch = true
   }
 }
@@ -986,32 +1025,28 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 
 # ====================================================create RDS===================================================실제로는 주석해제 good
 
-# resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
-#   name       = "crbs-rds-subnet-group"
-#   subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
+resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
+  name       = "crbs-rds-subnet-group"
+  subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-c.id]
+  description = "RDS subnet group for CRBS"
+  tags = { Name = "crbs-rds-subnet-group" }
+}
 
-# 데모 변동사항
-#   subnet_ids = [aws_subnet.CRBS-subnet-private-a.id, aws_subnet.CRBS-subnet-private-2a.id, aws_subnet.CRBS-subnet-private-c.id]
-
-#   description = "RDS subnet group for CRBS"
-#   tags = { Name = "crbs-rds-subnet-group" }
-# }
-
-# resource "aws_db_instance" "CRBS-rds-instance" {
-#   identifier           = "crbs-rds-instance"
-#   allocated_storage    = 20
-#   storage_type         = "gp2"
-#   engine               = "mysql"
-#   engine_version       = "8.0.19"
-#   instance_class       = "db.t2.micro"
-#   username             = var.db_username
-#   password             = var.db_password
-#   port              = var.db_port
-#   db_subnet_group_name = aws_db_subnet_group.CRBS-rds-subnet-group.name
-#   multi_az             = true
-#   vpc_security_group_ids = [aws_security_group.CRBS-security_group-private.id]
-#   skip_final_snapshot = true
-# }
+resource "aws_db_instance" "CRBS-rds-instance" {
+  identifier           = "crbs-rds-instance"
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "8.0.17"
+  instance_class       = "db.t2.micro"
+  username             = var.db_username
+  password             = var.db_password
+  port              = var.db_port
+  db_subnet_group_name = aws_db_subnet_group.CRBS-rds-subnet-group.name
+  multi_az             = true
+  vpc_security_group_ids = [aws_security_group.CRBS-security_group-private.id]
+  skip_final_snapshot = true
+}
 
 
 # ====================================데모 변동사항 new-UI autoscaling group=====================================
@@ -1094,15 +1129,19 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 #   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
 # }
 
+
 resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
   name = "CRBS-codedeploy-app"
 }
 
 resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
-  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+  app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "deployment-group"
-  service_role_arn      = aws_iam_role.CRBS-instace_role
+  deployment_group_name  = "CRBS-UI-deployment-group"
+  service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+  # 데모 변동사항
+  autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1112,7 +1151,16 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
       action                           = "TERMINATE"
       termination_wait_time_in_minutes = 5
     }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+
+    }
+
   }
+  auto_rollback_configuration {
+    enabled = false
+  }
+
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
@@ -1120,10 +1168,13 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   }
 
   load_balancer_info {
-    target_group_pair_info {
-      target_group {
+    target_group_info {
+#       prod_traffic_route {
+#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+#       }
+#       target_group {
         name = "${aws_lb_target_group.CRBS-UI.name}"
-      }
+#       }
     }
   }
 }
@@ -1131,8 +1182,11 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
 resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "deployment-group"
-  service_role_arn      = aws_iam_role.CRBS-instace_role
+  deployment_group_name = "CRBS-API-deployment-group"
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
+  # 데모 변동사항
+  autoscaling_groups     = [aws_autoscaling_group.new-API-asg.name]
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1142,6 +1196,15 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
       action                           = "TERMINATE"
       termination_wait_time_in_minutes = 5
     }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+
+    }
+
+  }
+
+    auto_rollback_configuration {
+    enabled = false
   }
 
   deployment_style {
@@ -1150,10 +1213,13 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   }
 
   load_balancer_info {
-    target_group_pair_info {
-      target_group {
+    target_group_info {
+#       prod_traffic_route {
+#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+#       }
+#       target_group {
         name = "${aws_lb_target_group.CRBS-API.name}"
-      }
+#       }
     }
   }
 }
