@@ -36,7 +36,7 @@ resource "aws_subnet" "CRBS-subnet-private-a" {
   tags = { Name = "CRBS-private-a" }
 }
 
-# 데모 변동사항
+# ================== 데모 변동사항 ====================
 # resource "aws_subnet" "CRBS-subnet-public-2a" {
 #   vpc_id                    = aws_vpc.CRBS-vpc.id
 #   availability_zone         = var.my_az1
@@ -111,7 +111,7 @@ resource "aws_route_table_association" "CRBS-route_table_associationpublic-a" {
   route_table_id = aws_route_table.CRBS-route_table-public.id
 }
 
-# 데모 변동사항
+# =========================== 데모 변동사항
 # resource "aws_route_table_association" "CRBS-route_table_associationpublic-2a" {
 #   subnet_id      = aws_subnet.CRBS-subnet-public-2a.id
 #   route_table_id = aws_route_table.CRBS-route_table-public.id
@@ -135,7 +135,8 @@ resource "aws_route_table_association" "CRBS-route_table_association-private-a" 
   subnet_id      = aws_subnet.CRBS-subnet-private-a.id
   route_table_id = aws_route_table.CRBS-route_table-private.id
 }
-# 데모 변동사항
+
+# ================ 데모 변동사항
 # resource "aws_route_table_association" "CRBS-route_table_association-private-2a" {
 #   subnet_id      = aws_subnet.CRBS-subnet-private-2a.id
 #   route_table_id = aws_route_table.CRBS-route_table-private.id
@@ -156,7 +157,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     aws_subnet.CRBS-subnet-private-c.id
 
   ]
-#   데모 변동사항
+# =================  데모 변동사항
 #    subnet_ids = [
 #     aws_subnet.CRBS-subnet-public-a.id,
 #     aws_subnet.CRBS-subnet-public-2a.id,
@@ -165,6 +166,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
 #    aws_subnet.CRBS-subnet-private-2a.id,
 #     aws_subnet.CRBS-subnet-private-c.id
 #    ]
+    
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -298,7 +300,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
 #     aws_subnet.CRBS-subnet-private-a.id,
 #     aws_subnet.CRBS-subnet-private-c.id
 #   ]
-#  #   데모 변동사항
+#  # ====  데모 변동사항
 # #   subnet_ids = [
 # #     aws_subnet.CRBS-subnet-private-a.id,
 # #     aws_subnet.CRBS-subnet-private-2a.id,
@@ -756,7 +758,6 @@ resource "aws_lb_target_group" "CRBS-UI" {
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
 
-# =============================================변경 사항============================================
   stickiness {
     type                = "lb_cookie"
     cookie_duration     = 600
@@ -785,8 +786,6 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   }
 }
 
-
-
 # ========================================================
 
 # Internal alb 설정
@@ -800,7 +799,8 @@ resource "aws_lb" "CRBS-internal" {
     aws_subnet.CRBS-subnet-private-a.id, 
     aws_subnet.CRBS-subnet-private-c.id
     ]
-#    데모 변동사항
+    
+# ==================================   데모 변동사항
   # subnets = [
   #   aws_subnet.CRBS-subnet-private-2a.id, 
   #   aws_subnet.CRBS-subnet-private-c.id
@@ -1011,7 +1011,7 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
 }
 
 
-# ====================================================create RDS===================================================실제로는 주석해제 good
+# ====================================================create RDS========================================
 
 resource "aws_db_subnet_group" "CRBS-rds-subnet-group" {
   name       = "crbs-rds-subnet-group"
