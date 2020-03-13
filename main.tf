@@ -1099,7 +1099,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name  = "CRBS-UI-deployment-group"
-  service_role_arn       = arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy
+  service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
   autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
 
   blue_green_deployment_config {
