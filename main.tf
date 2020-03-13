@@ -85,7 +85,7 @@ resource "aws_eip" "CRBS-EIP" {
 }
 
 # NAT Gateway
-resource "aws_nat_gateway" "CRBS-nat-gateway" {
+resource "aws_nat_gateway" "CRBS-natgateway" {
   allocation_id = aws_eip.CRBS-EIP.id
   subnet_id     = aws_subnet.CRBS-subnet-public-a.id
   depends_on        = [aws_internet_gateway.CRBS-igw]
