@@ -669,61 +669,61 @@ resource "aws_security_group" "CRBS-external-security_group-public" {
 }
 
 # External alb 설정
-resource "aws_lb" "CRBS-external" {
-  name            = "CRBS-external"
-  internal        = false
-  idle_timeout    = "300"
-  load_balancer_type = "application"
-  security_groups = [aws_security_group.CRBS-external-security_group-public.id]
-  subnets = [
-    aws_subnet.CRBS-subnet-public-a.id,
-    aws_subnet.CRBS-subnet-public-c.id
-    ]
-#    데모 변동사항
-  # subnets = [
-  #   aws_subnet.CRBS-subnet-public-2a.id, 
-  #   aws_subnet.CRBS-subnet-public-c.id
-  #   ]
-  enable_deletion_protection = false
-  tags = { Name = "CRBS-external" }
-}
+# resource "aws_lb" "CRBS-external" {
+#   name            = "CRBS-external"
+#   internal        = false
+#   idle_timeout    = "300"
+#   load_balancer_type = "application"
+#   security_groups = [aws_security_group.CRBS-external-security_group-public.id]
+#   subnets = [
+#     aws_subnet.CRBS-subnet-public-a.id,
+#     aws_subnet.CRBS-subnet-public-c.id
+#     ]
+# #    데모 변동사항
+#   # subnets = [
+#   #   aws_subnet.CRBS-subnet-public-2a.id, 
+#   #   aws_subnet.CRBS-subnet-public-c.id
+#   #   ]
+#   enable_deletion_protection = false
+#   tags = { Name = "CRBS-external" }
+# }
 
-# External alb target group 설정
-resource "aws_lb_target_group" "CRBS-UI" {
-  name     = "CRBS-UI"
-  port     = 8080
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.CRBS-vpc.id
-  target_type = "instance"
+# # External alb target group 설정
+# resource "aws_lb_target_group" "CRBS-UI" {
+#   name     = "CRBS-UI"
+#   port     = 8080
+#   protocol = "HTTP"
+#   vpc_id   = aws_vpc.CRBS-vpc.id
+#   target_type = "instance"
 
-# =============================================변경 사항============================================
-  stickiness {
-    type                = "lb_cookie"
-    cookie_duration     = 600
-    enabled             = "true"
-  }
+# # =============================================변경 사항============================================
+#   stickiness {
+#     type                = "lb_cookie"
+#     cookie_duration     = 600
+#     enabled             = "true"
+#   }
 
-  health_check {
-    healthy_threshold   = 10
-    unhealthy_threshold = 2
-    timeout             = 5
-    path                = var.target_group_external_path
-    interval            = 10
-    port                = 8090
-  }
-  tags = { Name = "CRBS-UI" }
-}
+#   health_check {
+#     healthy_threshold   = 10
+#     unhealthy_threshold = 2
+#     timeout             = 5
+#     path                = var.target_group_external_path
+#     interval            = 10
+#     port                = 8090
+#   }
+#   tags = { Name = "CRBS-UI" }
+# }
 
-# External listener
-resource "aws_lb_listener" "CRBS-UI-listener" {
-  load_balancer_arn = aws_lb.CRBS-external.arn
-  port              = "8080"
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.CRBS-UI.arn
-  }
-}
+# # External listener
+# resource "aws_lb_listener" "CRBS-UI-listener" {
+#   load_balancer_arn = aws_lb.CRBS-external.arn
+#   port              = "8080"
+#   protocol          = "HTTP"
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.CRBS-UI.arn
+#   }
+# }
 
 # alb에 UI instance 연결
 # resource "aws_alb_target_group_attachment" "CRBS-UI-a" {
@@ -740,53 +740,53 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
 # ========================================================
 
 # Internal alb 설정
-resource "aws_lb" "CRBS-internal" {
-  name            = "CRBS-internal"
-  internal        = true
-  idle_timeout    = "300"
-  load_balancer_type = "application"
-  security_groups = [aws_security_group.CRBS-security_group-public.id]
-  subnets = [
-    aws_subnet.CRBS-subnet-private-a.id, 
-    aws_subnet.CRBS-subnet-private-c.id
-    ]
-#    데모 변동사항
-  # subnets = [
-  #   aws_subnet.CRBS-subnet-private-2a.id, 
-  #   aws_subnet.CRBS-subnet-private-c.id
-  #   ]
-  enable_deletion_protection = false
-  tags = { Name = "CRBS-internal" }
-}
+# resource "aws_lb" "CRBS-internal" {
+#   name            = "CRBS-internal"
+#   internal        = true
+#   idle_timeout    = "300"
+#   load_balancer_type = "application"
+#   security_groups = [aws_security_group.CRBS-security_group-public.id]
+#   subnets = [
+#     aws_subnet.CRBS-subnet-private-a.id, 
+#     aws_subnet.CRBS-subnet-private-c.id
+#     ]
+# #    데모 변동사항
+#   # subnets = [
+#   #   aws_subnet.CRBS-subnet-private-2a.id, 
+#   #   aws_subnet.CRBS-subnet-private-c.id
+#   #   ]
+#   enable_deletion_protection = false
+#   tags = { Name = "CRBS-internal" }
+# }
 
-# Internal alb target group 설정
-resource "aws_lb_target_group" "CRBS-API" {
-  name     = "CRBS-API"
-  port     = 8080
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.CRBS-vpc.id
-  target_type = "instance"
-  health_check {
-    healthy_threshold   = 10
-    unhealthy_threshold = 2
-    timeout             = 5
-    path                = var.target_group_internal_path
-    interval            = 10
-    port                = 8090
-  }
-  tags = { Name = "CRBS-API" }
-}
+# # Internal alb target group 설정
+# resource "aws_lb_target_group" "CRBS-API" {
+#   name     = "CRBS-API"
+#   port     = 8080
+#   protocol = "HTTP"
+#   vpc_id   = aws_vpc.CRBS-vpc.id
+#   target_type = "instance"
+#   health_check {
+#     healthy_threshold   = 10
+#     unhealthy_threshold = 2
+#     timeout             = 5
+#     path                = var.target_group_internal_path
+#     interval            = 10
+#     port                = 8090
+#   }
+#   tags = { Name = "CRBS-API" }
+# }
 
-# Internal listener
-resource "aws_lb_listener" "CRBS-API-listener" {
-  load_balancer_arn = aws_lb.CRBS-internal.arn
-  port              = "80"
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.CRBS-API.arn
-  }
-}
+# # Internal listener
+# resource "aws_lb_listener" "CRBS-API-listener" {
+#   load_balancer_arn = aws_lb.CRBS-internal.arn
+#   port              = "80"
+#   protocol          = "HTTP"
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.CRBS-API.arn
+#   }
+# }
 
 # Internal alb에 API instance 연결
 # resource "aws_alb_target_group_attachment" "CRBS-API-a" {
@@ -854,82 +854,82 @@ resource "aws_iam_instance_profile" "CRBS-instace_profile" {
 
 # =========================================================aws_launch_template========================================================= #
 
-# aws_launch_template
-resource "aws_launch_template" "UI-template" {
-  name = "UI_template"
-  image_id = "${data.aws_ami.UI-ami.id}"
-  instance_type = "t2.micro"
-  key_name = var.key_name
+# # aws_launch_template
+# resource "aws_launch_template" "UI-template" {
+#   name = "UI_template"
+#   image_id = "${data.aws_ami.UI-ami.id}"
+#   instance_type = "t2.micro"
+#   key_name = var.key_name
 
-  iam_instance_profile  {
-    arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
-  }
+#   iam_instance_profile  {
+#     arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
+#   }
 
-  network_interfaces {
-    associate_public_ip_address = true
-    security_groups = ["${aws_security_group.CRBS-security_group-public.id}"]
-  }
+#   network_interfaces {
+#     associate_public_ip_address = true
+#     security_groups = ["${aws_security_group.CRBS-security_group-public.id}"]
+#   }
 
-  tag_specifications {
-    resource_type = "instance"
+#   tag_specifications {
+#     resource_type = "instance"
 
-  tags = {
-      Name = "UI_template"
-    }
-  }
-}
+#   tags = {
+#       Name = "UI_template"
+#     }
+#   }
+# }
 
-resource "aws_launch_template" "API-template" {
-  name = "API_template"
-  image_id = "${data.aws_ami.API-ami.id}"
-  instance_type = "t2.micro"
-  key_name = var.key_name
+# resource "aws_launch_template" "API-template" {
+#   name = "API_template"
+#   image_id = "${data.aws_ami.API-ami.id}"
+#   instance_type = "t2.micro"
+#   key_name = var.key_name
 
-  iam_instance_profile  {
-    arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
-  }
+#   iam_instance_profile  {
+#     arn             = "${aws_iam_instance_profile.CRBS-instace_profile.arn}"
+#   }
 
-  network_interfaces {
-    # associate_public_ip_address = true
-    security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
-  }
+#   network_interfaces {
+#     # associate_public_ip_address = true
+#     security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
+#   }
 
-  tag_specifications {
-    resource_type = "instance"
+#   tag_specifications {
+#     resource_type = "instance"
 
-  tags = {
-      Name = "API_template"
-    }
-  }
-}
+#   tags = {
+#       Name = "API_template"
+#     }
+#   }
+# }
 
 # =============================================autoscaling group=============================================
 
 # =============================================UI autoscaling group=============================================
-resource "aws_autoscaling_group" "UI-asg" {
-  name               = "UI-asg"
-  desired_capacity   = 2
-  max_size           = 4
-  min_size           = 2
-  # health_check_type         = "ELB"
-  health_check_grace_period = 300
-  vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-public-c.id}", 
-    "${aws_subnet.CRBS-subnet-public-a.id}"
-    ]
+# resource "aws_autoscaling_group" "UI-asg" {
+#   name               = "UI-asg"
+#   desired_capacity   = 2
+#   max_size           = 4
+#   min_size           = 2
+#   # health_check_type         = "ELB"
+#   health_check_grace_period = 300
+#   vpc_zone_identifier       = [
+#     "${aws_subnet.CRBS-subnet-public-c.id}", 
+#     "${aws_subnet.CRBS-subnet-public-a.id}"
+#     ]
 
-  termination_policies      = ["default"]
-  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
-  launch_template {
-    id      = "${aws_launch_template.UI-template.id}"
-    version = "$Latest"
-  }
-  tag {
-    key                 = "Name"
-    value               = "UI-asg2"
-    propagate_at_launch = true
-  }
-}
+#   termination_policies      = ["default"]
+#   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+#   launch_template {
+#     id      = "${aws_launch_template.UI-template.id}"
+#     version = "$Latest"
+#   }
+#   tag {
+#     key                 = "Name"
+#     value               = "UI-asg2"
+#     propagate_at_launch = true
+#   }
+# }
 
 # resource "aws_autoscaling_policy" "UI-asg-policy" {
 #   name                   = "UI-asg-policy"
@@ -946,37 +946,37 @@ resource "aws_autoscaling_group" "UI-asg" {
 # }
 
 # =============================================API autoscaling group=============================================
-resource "aws_autoscaling_group" "API-asg" {
-  name               = "API-asg"
-  desired_capacity   = 2
-  max_size           = 4
-  min_size           = 2
-  # health_check_type         = "ELB"
-  health_check_grace_period = 300
-  vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-private-c.id}", 
-    "${aws_subnet.CRBS-subnet-private-a.id}"
-    ]
-  termination_policies      = ["default"]
-  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
-  launch_template {
-    id      = "${aws_launch_template.API-template.id}"
-    version = "$Latest"
-  }
-  tag {
-    key                 = "Name"
-    value               = "API-asg2"
-    propagate_at_launch = true
-  }
-}
+# resource "aws_autoscaling_group" "API-asg" {
+#   name               = "API-asg"
+#   desired_capacity   = 2
+#   max_size           = 4
+#   min_size           = 2
+#   # health_check_type         = "ELB"
+#   health_check_grace_period = 300
+#   vpc_zone_identifier       = [
+#     "${aws_subnet.CRBS-subnet-private-c.id}", 
+#     "${aws_subnet.CRBS-subnet-private-a.id}"
+#     ]
+#   termination_policies      = ["default"]
+#   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+#   launch_template {
+#     id      = "${aws_launch_template.API-template.id}"
+#     version = "$Latest"
+#   }
+#   tag {
+#     key                 = "Name"
+#     value               = "API-asg2"
+#     propagate_at_launch = true
+#   }
+# }
 
-resource "aws_autoscaling_policy" "API-asg-policy" {
-  name                   = "API-asg-policy"
-  scaling_adjustment     = 80
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
-}
+# resource "aws_autoscaling_policy" "API-asg-policy" {
+#   name                   = "API-asg-policy"
+#   scaling_adjustment     = 80
+#   adjustment_type        = "ChangeInCapacity"
+#   cooldown               = 300
+#   autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
+# }
 
 # Create a new ALB Target Group attachment=============== 나중에 해야함
 # resource "aws_autoscaling_attachment" "API-asg_attachment" {
@@ -1091,93 +1091,93 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 # }
 
 
-resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
-  name = "CRBS-codedeploy-app"
-}
+# resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
+#   name = "CRBS-codedeploy-app"
+# }
 
-resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
-  app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name  = "CRBS-UI-deployment-group"
-  service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+# resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
+#   app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
+#   deployment_config_name = "CodeDeployDefault.AllAtOnce"
+#   deployment_group_name  = "CRBS-UI-deployment-group"
+#   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+#   autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
 
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
+#   blue_green_deployment_config {
+#     deployment_ready_option {
+#       action_on_timeout = "CONTINUE_DEPLOYMENT"
+#     }
+#     terminate_blue_instances_on_deployment_success {
+#       action                           = "TERMINATE"
+#       termination_wait_time_in_minutes = 5
+#     }
+#     green_fleet_provisioning_option {
+#       action                            = "COPY_AUTO_SCALING_GROUP"
       
-    }
+#     }
     
-  }
-  auto_rollback_configuration {
-    enabled = false
-  }
+#   }
+#   auto_rollback_configuration {
+#     enabled = false
+#   }
   
 
-  deployment_style {
-    deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
-  }
+#   deployment_style {
+#     deployment_option = "WITH_TRAFFIC_CONTROL"
+#     deployment_type   = "BLUE_GREEN"
+#   }
 
-  load_balancer_info {
-    target_group_info {
-#       prod_traffic_route {
-#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
-#       }
-#       target_group {
-        name = "${aws_lb_target_group.CRBS-UI.name}"
-#       }
-    }
-  }
-}
+#   load_balancer_info {
+#     target_group_info {
+# #       prod_traffic_route {
+# #         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+# #       }
+# #       target_group {
+#         name = "${aws_lb_target_group.CRBS-UI.name}"
+# #       }
+#     }
+#   }
+# }
 
-resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
-  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "CRBS-API-deployment-group"
-  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
+# resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
+#   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+#   deployment_config_name = "CodeDeployDefault.AllAtOnce"
+#   deployment_group_name = "CRBS-API-deployment-group"
+#   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+#   autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
 
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
+#   blue_green_deployment_config {
+#     deployment_ready_option {
+#       action_on_timeout = "CONTINUE_DEPLOYMENT"
+#     }
+#     terminate_blue_instances_on_deployment_success {
+#       action                           = "TERMINATE"
+#       termination_wait_time_in_minutes = 5
+#     }
+#     green_fleet_provisioning_option {
+#       action                            = "COPY_AUTO_SCALING_GROUP"
       
-    }
+#     }
     
-  }
+#   }
 
-    auto_rollback_configuration {
-    enabled = false
-  }
+#     auto_rollback_configuration {
+#     enabled = false
+#   }
 
-  deployment_style {
-    deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
-  }
+#   deployment_style {
+#     deployment_option = "WITH_TRAFFIC_CONTROL"
+#     deployment_type   = "BLUE_GREEN"
+#   }
 
-  load_balancer_info {
-    target_group_info {
-#       prod_traffic_route {
-#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
-#       }
-#       target_group {
-        name = "${aws_lb_target_group.CRBS-API.name}"
-#       }
-    }
-  }
-}
+#   load_balancer_info {
+#     target_group_info {
+# #       prod_traffic_route {
+# #         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+# #       }
+# #       target_group {
+#         name = "${aws_lb_target_group.CRBS-API.name}"
+# #       }
+#     }
+#   }
+# }
 
