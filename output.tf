@@ -17,7 +17,7 @@ output "igw_id" {
   value="${aws_internet_gateway.CRBS-igw.id}"
 }
 output "nat_id" {
-  value="${aws_nat_gateway.CRBS-nat.id}"
+  value="${aws_nat_gateway.CRBS-natgateway.id}"
 }
 output "route_table_public_id" {
   value="${aws_route_table.CRBS-route_table-public.id}"
@@ -31,3 +31,53 @@ output "security_group_public_id" {
 output "security_group_private_id" {
   value="${aws_security_group.CRBS-security_group-private.id}"
 }
+
+output "CRBS2_external_dns_name" {
+  value="${aws_lb.CRBS-external.dns_name}"
+}
+
+output "CRBS2_internal_dns_name" {
+  value="${aws_lb.CRBS-internal.dns_name}"
+}
+
+
+output "UI_asg" {
+  value="${aws_autoscaling_group.UI-asg.name}"
+}
+
+output "API_asg" {
+  value="${aws_autoscaling_group.API-asg.name}"
+}
+
+output "CRBS2_rds_instance_address" {
+  value="${aws_db_instance.CRBS-rds-instance.address}"
+}
+
+output "CRBS2_rds_instance_id" {
+  value="${aws_db_instance.CRBS-rds-instance.id}"
+}
+
+
+
+
+
+
+
+
+
+
+
+# output "public_subnet_2a_id" {
+#   value="${aws_subnet.CRBS2-subnet-public-2a.id}"
+# }
+# output "private_subnet_2a_id" {
+#   value="${aws_subnet.CRBS2-subnet-private-2a.id}"
+# }
+
+# output "new_UI_asg" {
+#   value="${aws_autoscaling_group.new-UI-asg.name}"
+# }
+
+# output "new_API_asg" {
+#   value="${aws_autoscaling_group.new-API-asg.name}"
+# }

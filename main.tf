@@ -329,7 +329,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
 #     protocol   = "tcp"
 #     rule_no    = 130
 #     action     = "allow"
-#     cidr_block = "172.16.0.0/16"
+#     cidr_block = "172.16.0.0/16" 
 #     from_port  = 8080
 #     to_port    = 8080
 #   }
@@ -718,11 +718,13 @@ resource "aws_lb" "CRBS-external" {
     aws_subnet.CRBS-subnet-public-a.id,
     aws_subnet.CRBS-subnet-public-c.id
     ]
+
 #    데모 변동사항
   # subnets = [
   #   aws_subnet.CRBS-subnet-public-2a.id,
   #   aws_subnet.CRBS-subnet-public-c.id
   #   ]
+
   enable_deletion_protection = false
   tags = { Name = "CRBS-external" }
 }
@@ -764,17 +766,6 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   }
 }
 
-# alb에 UI instance 연결
-# resource "aws_alb_target_group_attachment" "CRBS-UI-a" {
-#   target_group_arn = aws_lb_target_group.CRBS-UI.arn
-#   target_id        = aws_instance.CRBS-public-a.id
-#   port             = 80
-# }
-# resource "aws_alb_target_group_attachment" "CRBS-UI-c" {
-#   target_group_arn = aws_lb_target_group.CRBS-UI.arn
-#   target_id        = aws_instance.CRBS-public-c.id
-#   port             = 80
-# }
 
 # ========================================================
 
@@ -827,18 +818,7 @@ resource "aws_lb_listener" "CRBS-API-listener" {
   }
 }
 
-# Internal alb에 API instance 연결
-# resource "aws_alb_target_group_attachment" "CRBS-API-a" {
-#   target_group_arn = aws_lb_target_group.CRBS-API.arn
-#   target_id        = aws_instance.CRBS-private-a.id
-#   port             = 80
-# }
 
-# resource "aws_alb_target_group_attachment" "CRBS-API-c" {
-#   target_group_arn = aws_lb_target_group.CRBS-API.arn
-#   target_id        = aws_instance.CRBS-private-c.id
-#   port             = 80
-# }
 
 # =================================================Instance Policy & Role======================================================
 resource "aws_iam_role" "CRBS-instace_role" {
@@ -929,7 +909,6 @@ resource "aws_launch_template" "API-template" {
   }
 
   network_interfaces {
-    # associate_public_ip_address = true
     security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
   }
 
@@ -978,11 +957,7 @@ resource "aws_autoscaling_policy" "UI-asg-policy" {
   autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
 }
 
-# Create a new ALB Target Group attachment=============== 나중에 해야함
-# resource "aws_autoscaling_attachment" "UI-asg_attachment" {
-#   autoscaling_group_name = "${aws_autoscaling_group.UI-asg.id}"
-#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-UI.arn}"
-# }
+
 
 # =============================================API autoscaling group=============================================
 resource "aws_autoscaling_group" "API-asg" {
@@ -1017,11 +992,7 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
   autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
 }
 
-# Create a new ALB Target Group attachment=============== 나중에 해야함
-# resource "aws_autoscaling_attachment" "API-asg_attachment" {
-#   autoscaling_group_name = "${aws_autoscaling_group.API-asg.id}"
-#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
-# }
+
 
 # ====================================================create RDS===================================================실제로는 주석해제 good
 
@@ -1083,11 +1054,6 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 #   autoscaling_group_name = "${aws_autoscaling_group.new-UI-asg.name}"
 # }
 
-# Create a new ALB Target Group attachment=============== 나중에 해야함
-# resource "aws_autoscaling_attachment" "new-UI-asg_attachment" {
-#   autoscaling_group_name = "${aws_autoscaling_group.new-UI-asg.id}"
-#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-UI.arn}"
-# }
 
 # =============================================데모 변동사항 new-API autoscaling group=============================================
 # resource "aws_autoscaling_group" "new-API-asg" {
@@ -1123,12 +1089,8 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 #   autoscaling_group_name = "${aws_autoscaling_group.new-API-asg.name}"
 # }
 
-# Create a new ALB Target Group attachment=============== 나중에 해야함
-# resource "aws_autoscaling_attachment" "new-API-asg_attachment" {
-#   autoscaling_group_name = "${aws_autoscaling_group.new-API-asg.id}"
-#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
-# }
 
+#================= codedeploy deployment ============================
 
 resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
   name = "CRBS-codedeploy-app"
@@ -1140,9 +1102,6 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   deployment_group_name  = "CRBS-UI-deployment-group"
   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
   autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
-  # 데모 변동사항
-  autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
-
   blue_green_deployment_config {
     deployment_ready_option {
       action_on_timeout = "CONTINUE_DEPLOYMENT"
@@ -1179,15 +1138,93 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   }
 }
 
+
+# ======================== 데모 변동 사항 =============================
+resource "aws_codedeploy_deployment_group" "CRBS-new-UI-deployment-group" {
+  app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"
+  deployment_group_name  = "CRBS-new-UI-deployment-group"
+  service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
+  blue_green_deployment_config {
+    deployment_ready_option {
+      action_on_timeout = "CONTINUE_DEPLOYMENT"
+    }
+    terminate_blue_instances_on_deployment_success {
+      action                           = "TERMINATE"
+      termination_wait_time_in_minutes = 5
+    }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+
+    }
+
+  }
+  auto_rollback_configuration {
+    enabled = false
+  }
+
+  deployment_style {
+    deployment_option = "WITH_TRAFFIC_CONTROL"
+    deployment_type   = "BLUE_GREEN"
+  }
+
+  load_balancer_info {
+    target_group_info {
+#       prod_traffic_route {
+#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
+#       }
+#       target_group {
+        name = "${aws_lb_target_group.CRBS-UI.name}"
+#       }
+    }
+  }
+}
+
+
 resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "CRBS-API-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
   autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
-  # 데모 변동사항
-  autoscaling_groups     = [aws_autoscaling_group.new-API-asg.name]
+  blue_green_deployment_config {
+    deployment_ready_option {
+      action_on_timeout = "CONTINUE_DEPLOYMENT"
+    }
+    terminate_blue_instances_on_deployment_success {
+      action                           = "TERMINATE"
+      termination_wait_time_in_minutes = 5
+    }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+    }
+  }
 
+    auto_rollback_configuration {
+    enabled = false
+  }
+
+  deployment_style {
+    deployment_option = "WITH_TRAFFIC_CONTROL"
+    deployment_type   = "BLUE_GREEN"
+  }
+
+  load_balancer_info {
+    target_group_info {
+        name = "${aws_lb_target_group.CRBS-API.name}"
+    }
+  }
+}
+
+
+# ==================== api =============================
+resource "aws_codedeploy_deployment_group" "CRBS-new-API-deployment-group" {
+  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"
+  deployment_group_name = "CRBS-new-API-deployment-group"
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups                = [aws_autoscaling_group.new-API-asg.name]
   blue_green_deployment_config {
     deployment_ready_option {
       action_on_timeout = "CONTINUE_DEPLOYMENT"
@@ -1214,12 +1251,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
 
   load_balancer_info {
     target_group_info {
-#       prod_traffic_route {
-#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
-#       }
-#       target_group {
         name = "${aws_lb_target_group.CRBS-API.name}"
-#       }
     }
   }
 }
