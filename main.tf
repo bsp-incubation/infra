@@ -160,7 +160,10 @@ resource "aws_network_acl" "CRBS-acl-public" {
 #    subnet_ids = [
 #     aws_subnet.CRBS-subnet-public-a.id,
 #     aws_subnet.CRBS-subnet-public-2a.id,
-#     aws_subnet.CRBS-subnet-public-c.id
+#     aws_subnet.CRBS-subnet-public-c.id,
+#    aws_subnet.CRBS-subnet-private-a.id,
+#    aws_subnet.CRBS-subnet-private-2a.id,
+#     aws_subnet.CRBS-subnet-private-c.id
 #    ]
   ingress {
     protocol   = "tcp"
@@ -329,7 +332,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
 #     protocol   = "tcp"
 #     rule_no    = 130
 #     action     = "allow"
-#     cidr_block = "172.16.0.0/16" 
+#     cidr_block = "172.16.0.0/16"
 #     from_port  = 8080
 #     to_port    = 8080
 #   }
@@ -495,6 +498,12 @@ resource "aws_security_group" "CRBS-security_group-public" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  egress {
     protocol   = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
     from_port  = "-1"
@@ -533,6 +542,12 @@ resource "aws_security_group" "CRBS-security_group-private" {
     cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
     protocol   = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
     from_port  = "-1"
@@ -564,6 +579,12 @@ resource "aws_security_group" "CRBS-security_group-private" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  egress {
     protocol   = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
     from_port  = "-1"
@@ -573,14 +594,14 @@ resource "aws_security_group" "CRBS-security_group-private" {
   tags = { Name = "CRBS-private" }
 }
 
-resource "aws_security_group_rule" "public-egress-MySQL" {
-  type            = "egress"
-  from_port       = 3306
-  to_port         = 3306
-  protocol        = "tcp"
-  source_security_group_id = aws_security_group.CRBS-security_group-private.id
-  security_group_id = aws_security_group.CRBS-security_group-public.id
-}
+# resource "aws_security_group_rule" "public-egress-MySQL" {
+#   type            = "egress"
+#   from_port       = 3306
+#   to_port         = 3306
+#   protocol        = "tcp"
+#   source_security_group_id = aws_security_group.CRBS-security_group-private.id
+#   security_group_id = aws_security_group.CRBS-security_group-public.id
+# }
 
 # resource "aws_security_group_rule" "private-ingress-HTTP" {
 #   type            = "ingress"
@@ -591,14 +612,14 @@ resource "aws_security_group_rule" "public-egress-MySQL" {
 #   security_group_id = aws_security_group.CRBS-security_group-private.id
 # }
 
-resource "aws_security_group_rule" "private-ingress-MySQL" {
-  type            = "ingress"
-  from_port       = 3306
-  to_port         = 3306
-  protocol        = "tcp"
-  source_security_group_id = aws_security_group.CRBS-security_group-public.id
-  security_group_id = aws_security_group.CRBS-security_group-private.id
-}
+# resource "aws_security_group_rule" "private-ingress-MySQL" {
+#   type            = "ingress"
+#   from_port       = 3306
+#   to_port         = 3306
+#   protocol        = "tcp"
+#   source_security_group_id = aws_security_group.CRBS-security_group-public.id
+#   security_group_id = aws_security_group.CRBS-security_group-private.id
+# }
 
 # resource "aws_security_group_rule" "private-ingress-HTTPS" {
 #   type            = "ingress"
@@ -609,14 +630,14 @@ resource "aws_security_group_rule" "private-ingress-MySQL" {
 #   security_group_id = aws_security_group.CRBS-security_group-private.id
 # }
 
-resource "aws_security_group_rule" "private-egress-MySQL" {
-  type            = "egress"
-  from_port       = 3306
-  to_port         = 3306
-  protocol        = "tcp"
-  source_security_group_id = aws_security_group.CRBS-security_group-public.id
-  security_group_id = aws_security_group.CRBS-security_group-private.id
-}
+# resource "aws_security_group_rule" "private-egress-MySQL" {
+#   type            = "egress"
+#   from_port       = 3306
+#   to_port         = 3306
+#   protocol        = "tcp"
+#   source_security_group_id = aws_security_group.CRBS-security_group-public.id
+#   security_group_id = aws_security_group.CRBS-security_group-private.id
+# }
 
 # =========================================================AMI=======================================================
 data "aws_ami" "UI-ami" {
@@ -718,13 +739,11 @@ resource "aws_lb" "CRBS-external" {
     aws_subnet.CRBS-subnet-public-a.id,
     aws_subnet.CRBS-subnet-public-c.id
     ]
-
 #    데모 변동사항
   # subnets = [
-  #   aws_subnet.CRBS-subnet-public-2a.id,
+  #   aws_subnet.CRBS-subnet-public-2a.id, 
   #   aws_subnet.CRBS-subnet-public-c.id
   #   ]
-
   enable_deletion_protection = false
   tags = { Name = "CRBS-external" }
 }
@@ -767,6 +786,7 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
 }
 
 
+
 # ========================================================
 
 # Internal alb 설정
@@ -777,12 +797,12 @@ resource "aws_lb" "CRBS-internal" {
   load_balancer_type = "application"
   security_groups = [aws_security_group.CRBS-security_group-public.id]
   subnets = [
-    aws_subnet.CRBS-subnet-private-a.id,
+    aws_subnet.CRBS-subnet-private-a.id, 
     aws_subnet.CRBS-subnet-private-c.id
     ]
 #    데모 변동사항
   # subnets = [
-  #   aws_subnet.CRBS-subnet-private-2a.id,
+  #   aws_subnet.CRBS-subnet-private-2a.id, 
   #   aws_subnet.CRBS-subnet-private-c.id
   #   ]
   enable_deletion_protection = false
@@ -817,7 +837,6 @@ resource "aws_lb_listener" "CRBS-API-listener" {
     target_group_arn = aws_lb_target_group.CRBS-API.arn
   }
 }
-
 
 
 # =================================================Instance Policy & Role======================================================
@@ -932,7 +951,7 @@ resource "aws_autoscaling_group" "UI-asg" {
   # health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-public-c.id}",
+    "${aws_subnet.CRBS-subnet-public-c.id}", 
     "${aws_subnet.CRBS-subnet-public-a.id}"
     ]
 
@@ -958,7 +977,6 @@ resource "aws_autoscaling_policy" "UI-asg-policy" {
 }
 
 
-
 # =============================================API autoscaling group=============================================
 resource "aws_autoscaling_group" "API-asg" {
   name               = "API-asg"
@@ -968,7 +986,7 @@ resource "aws_autoscaling_group" "API-asg" {
   # health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = [
-    "${aws_subnet.CRBS-subnet-private-c.id}",
+    "${aws_subnet.CRBS-subnet-private-c.id}", 
     "${aws_subnet.CRBS-subnet-private-a.id}"
     ]
   termination_policies      = ["default"]
@@ -991,7 +1009,6 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
   cooldown               = 300
   autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
 }
-
 
 
 # ====================================================create RDS===================================================실제로는 주석해제 good
@@ -1030,7 +1047,7 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 #   health_check_grace_period = 300
 
 #   vpc_zone_identifier       = [
-#     "${aws_subnet.CRBS-subnet-public-c.id}",
+#     "${aws_subnet.CRBS-subnet-public-c.id}", 
 #     "${aws_subnet.CRBS-subnet-public-2a.id}"
 #     ]
 #   termination_policies      = ["default"]
@@ -1055,6 +1072,7 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 # }
 
 
+
 # =============================================데모 변동사항 new-API autoscaling group=============================================
 # resource "aws_autoscaling_group" "new-API-asg" {
 #   name               = "new-API-asg"
@@ -1065,7 +1083,7 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 #   health_check_grace_period = 300
 
 #   vpc_zone_identifier       = [
-#     "${aws_subnet.CRBS-subnet-private-c.id}",
+#     "${aws_subnet.CRBS-subnet-private-c.id}", 
 #     "${aws_subnet.CRBS-subnet-private-2a.id}"
 #     ]
 #   termination_policies      = ["default"]
@@ -1090,7 +1108,7 @@ resource "aws_db_instance" "CRBS-rds-instance" {
 # }
 
 
-#================= codedeploy deployment ============================
+
 
 resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
   name = "CRBS-codedeploy-app"
@@ -1102,6 +1120,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   deployment_group_name  = "CRBS-UI-deployment-group"
   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
   autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+
   blue_green_deployment_config {
     deployment_ready_option {
       action_on_timeout = "CONTINUE_DEPLOYMENT"
@@ -1112,14 +1131,14 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
     }
     green_fleet_provisioning_option {
       action                            = "COPY_AUTO_SCALING_GROUP"
-
+      
     }
-
+    
   }
   auto_rollback_configuration {
     enabled = false
   }
-
+  
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
@@ -1128,16 +1147,48 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
 
   load_balancer_info {
     target_group_info {
-#       prod_traffic_route {
-#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
-#       }
-#       target_group {
         name = "${aws_lb_target_group.CRBS-UI.name}"
-#       }
     }
   }
 }
 
+resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
+  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"
+  deployment_group_name = "CRBS-API-deployment-group"
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
+
+  blue_green_deployment_config {
+    deployment_ready_option {
+      action_on_timeout = "CONTINUE_DEPLOYMENT"
+    }
+    terminate_blue_instances_on_deployment_success {
+      action                           = "TERMINATE"
+      termination_wait_time_in_minutes = 5
+    }
+    green_fleet_provisioning_option {
+      action                            = "COPY_AUTO_SCALING_GROUP"
+      
+    }
+    
+  }
+
+    auto_rollback_configuration {
+    enabled = false
+  }
+
+  deployment_style {
+    deployment_option = "WITH_TRAFFIC_CONTROL"
+    deployment_type   = "BLUE_GREEN"
+  }
+
+  load_balancer_info {
+    target_group_info {
+        name = "${aws_lb_target_group.CRBS-API.name}"
+    }
+  }
+}
 
 # ======================== 데모 변동 사항 =============================
 resource "aws_codedeploy_deployment_group" "CRBS-new-UI-deployment-group" {
@@ -1171,52 +1222,12 @@ resource "aws_codedeploy_deployment_group" "CRBS-new-UI-deployment-group" {
 
   load_balancer_info {
     target_group_info {
-#       prod_traffic_route {
-#         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
-#       }
-#       target_group {
+
         name = "${aws_lb_target_group.CRBS-UI.name}"
-#       }
+
     }
   }
 }
-
-
-resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
-  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "CRBS-API-deployment-group"
-  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
-    }
-  }
-
-    auto_rollback_configuration {
-    enabled = false
-  }
-
-  deployment_style {
-    deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
-  }
-
-  load_balancer_info {
-    target_group_info {
-        name = "${aws_lb_target_group.CRBS-API.name}"
-    }
-  }
-}
-
 
 # ==================== api =============================
 resource "aws_codedeploy_deployment_group" "CRBS-new-API-deployment-group" {
@@ -1255,3 +1266,4 @@ resource "aws_codedeploy_deployment_group" "CRBS-new-API-deployment-group" {
     }
   }
 }
+

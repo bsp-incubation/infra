@@ -13,7 +13,7 @@ aws elbv2 describe-load-balancers --names CRBS-external
 aws elbv2 describe-load-balancers --names CRBS-internal
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$UI_asg"
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$API_asg"
-# aws ec2 describe-db-instances --filters "Name=db-instance-id,Values=$CRBS2_rds_instance_id" --query 'SecurityGroups[*].[DBInstanceIdentifier][*]'
+aws ec2 describe-db-instances --filters "Name=db-instance-id,Values=$CRBS2_rds_instance_id" --query 'SecurityGroups[*].[DBInstanceIdentifier][*]'
 
 
 
