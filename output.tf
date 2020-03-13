@@ -49,13 +49,13 @@ output "API_asg" {
   value="${aws_autoscaling_group.API-asg.name}"
 }
 
-output "CRBS2_rds_instance_address" {
-  value="${aws_db_instance.CRBS-rds-instance.address}"
-}
+# output "CRBS2_rds_instance_address" {
+#   value="${aws_db_instance.CRBS-rds-instance.address}"
+# }
 
-output "CRBS2_rds_instance_id" {
-  value="${aws_db_instance.CRBS-rds-instance.id}"
-}
+# output "CRBS2_rds_instance_id" {
+#   value="${aws_db_instance.CRBS-rds-instance.id}"
+# }
 
 
 
