@@ -32,22 +32,22 @@ output "security_group_private_id" {
   value="${aws_security_group.CRBS-security_group-private.id}"
 }
 
-output "CRBS2_external_dns_name" {
-  value="${aws_lb.CRBS-external.dns_name}"
-}
+# output "CRBS2_external_dns_name" {
+#   value="${aws_lb.CRBS-external.dns_name}"
+# }
 
-output "CRBS2_internal_dns_name" {
-  value="${aws_lb.CRBS-internal.dns_name}"
-}
+# output "CRBS2_internal_dns_name" {
+#   value="${aws_lb.CRBS-internal.dns_name}"
+# }
 
 
-output "UI_asg" {
-  value="${aws_autoscaling_group.UI-asg.name}"
-}
+# output "UI_asg" {
+#   value="${aws_autoscaling_group.UI-asg.name}"
+# }
 
-output "API_asg" {
-  value="${aws_autoscaling_group.API-asg.name}"
-}
+# output "API_asg" {
+#   value="${aws_autoscaling_group.API-asg.name}"
+# }
 
 # output "CRBS2_rds_instance_address" {
 #   value="${aws_db_instance.CRBS2-rds-instance.address}"
