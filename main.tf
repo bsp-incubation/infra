@@ -709,7 +709,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
     timeout             = 5
     path                = var.target_group_external_path
     interval            = 10
-    port                = 8090
+    port                = 8080
   }
   tags = { Name = "CRBS-UI" }
 }
@@ -762,7 +762,7 @@ resource "aws_lb" "CRBS-internal" {
 # Internal alb target group 설정
 resource "aws_lb_target_group" "CRBS-API" {
   name     = "CRBS-API"
-  port     = 8080
+  port     = 8090
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
@@ -780,7 +780,7 @@ resource "aws_lb_target_group" "CRBS-API" {
 # Internal listener
 resource "aws_lb_listener" "CRBS-API-listener" {
   load_balancer_arn = aws_lb.CRBS-internal.arn
-  port              = "80"
+  port              = "8090"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
