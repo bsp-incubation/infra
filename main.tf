@@ -939,11 +939,11 @@ resource "aws_autoscaling_policy" "UI-asg-policy" {
   autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
 }
 
-Create a new ALB Target Group attachment=============== 나중에 해야함
-resource "aws_autoscaling_attachment" "UI-asg_attachment" {
-  autoscaling_group_name = "${aws_autoscaling_group.UI-asg.id}"
-  alb_target_group_arn   = "${aws_lb_target_group.CRBS-UI.arn}"
-}
+# Create a new ALB Target Group attachment=============== 나중에 해야함
+# resource "aws_autoscaling_attachment" "UI-asg_attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.UI-asg.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-UI.arn}"
+# }
 
 # =============================================API autoscaling group=============================================
 resource "aws_autoscaling_group" "API-asg" {
@@ -978,11 +978,11 @@ resource "aws_autoscaling_policy" "API-asg-policy" {
   autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
 }
 
-Create a new ALB Target Group attachment=============== 나중에 해야함
-resource "aws_autoscaling_attachment" "API-asg_attachment" {
-  autoscaling_group_name = "${aws_autoscaling_group.API-asg.id}"
-  alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
-}
+# Create a new ALB Target Group attachment=============== 나중에 해야함
+# resource "aws_autoscaling_attachment" "API-asg_attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.API-asg.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.CRBS-API.arn}"
+# }
 
 # ====================================================create RDS===================================================실제로는 주석해제 good
 
