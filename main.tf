@@ -691,7 +691,7 @@ resource "aws_lb" "CRBS-external" {
 # External alb target group 설정
 resource "aws_lb_target_group" "CRBS-UI" {
   name     = "CRBS-UI"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
@@ -709,7 +709,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
     timeout             = 5
     path                = var.target_group_external_path
     interval            = 10
-    port                = 80
+    port                = 8090
   }
   tags = { Name = "CRBS-UI" }
 }
@@ -717,7 +717,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
 # External listener
 resource "aws_lb_listener" "CRBS-UI-listener" {
   load_balancer_arn = aws_lb.CRBS-external.arn
-  port              = "80"
+  port              = "8080"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
@@ -762,7 +762,7 @@ resource "aws_lb" "CRBS-internal" {
 # Internal alb target group 설정
 resource "aws_lb_target_group" "CRBS-API" {
   name     = "CRBS-API"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
   target_type = "instance"
@@ -772,7 +772,7 @@ resource "aws_lb_target_group" "CRBS-API" {
     timeout             = 5
     path                = var.target_group_internal_path
     interval            = 10
-    port                = 80
+    port                = 8090
   }
   tags = { Name = "CRBS-API" }
 }
@@ -890,7 +890,7 @@ resource "aws_launch_template" "API-template" {
   }
 
   network_interfaces {
-    associate_public_ip_address = true
+    # associate_public_ip_address = true
     security_groups = ["${aws_security_group.CRBS-security_group-private.id}"]
   }
 
@@ -1096,11 +1096,11 @@ resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
 }
 
 resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
-  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+  app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "CRBS-UI-deployment-group"
-  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups                = [aws_autoscaling_group.UI-asg.name]
+  deployment_group_name  = "CRBS-UI-deployment-group"
+  service_role_arn       = arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy
+  autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1116,7 +1116,9 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
     }
     
   }
-
+  auto_rollback_configuration {
+    enabled = false
+  }
   
 
   deployment_style {
@@ -1130,7 +1132,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
 #         listener_arns = ["${aws_lb_listener.CRBS-API-listener.arn}"]
 #       }
 #       target_group {
-        name = "${aws_lb_target_group.CRBS-API.name}"
+        name = "${aws_lb_target_group.CRBS-UI.name}"
 #       }
     }
   }
@@ -1156,6 +1158,10 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
       
     }
     
+  }
+
+    auto_rollback_configuration {
+    enabled = false
   }
 
   deployment_style {
