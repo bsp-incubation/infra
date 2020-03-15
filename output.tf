@@ -40,7 +40,6 @@ output "CRBS2_internal_dns_name" {
   value="${aws_lb.CRBS-internal.dns_name}"
 }
 
-
 output "UI_asg" {
   value="${aws_autoscaling_group.UI-asg.name}"
 }
@@ -57,8 +56,17 @@ output "CRBS2_rds_instance_id" {
   value="${aws_db_instance.CRBS-rds-instance.id}"
 }
 
+output "aws_codedeploy_app" {
+  value="${aws_codedeploy_app.CRBS-codedeploy-app.name}"
+}
 
+output "aws_codedeploy_deployment_group_UI" {
+  value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group.deployment_group_name}"
+}
 
+output "aws_codedeploy_deployment_group_API" {
+  value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group.deployment_group_name}"
+}
 
 
 

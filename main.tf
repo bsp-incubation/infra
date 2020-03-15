@@ -278,7 +278,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     rule_no    = 140
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 32768
+    from_port  = 1024
     to_port    = 65535
   }
   egress {
@@ -479,6 +479,12 @@ resource "aws_security_group" "CRBS-security_group-public" {
     cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
+    protocol  = "tcp"
+    from_port = 3000
+    to_port   = 3000
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
     protocol   = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
     from_port  = "-1"
@@ -512,6 +518,12 @@ resource "aws_security_group" "CRBS-security_group-public" {
   egress {
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -566,6 +578,12 @@ resource "aws_security_group" "CRBS-security_group-private" {
     cidr_blocks = ["172.16.0.0/16"]
   }
   ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
     protocol   = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
     from_port  = "-1"
@@ -599,6 +617,12 @@ resource "aws_security_group" "CRBS-security_group-private" {
   egress {
     from_port   = 3306
     to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["172.16.0.0/16"]
+  }
+  egress {
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["172.16.0.0/16"]
   }
@@ -714,6 +738,12 @@ resource "aws_security_group" "CRBS-external-security_group-public" {
     to_port   = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    protocol  = "tcp"
+    from_port = 3000
+    to_port   = 3000
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
 
   egress {
@@ -737,6 +767,12 @@ resource "aws_security_group" "CRBS-external-security_group-public" {
   egress {
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
