@@ -26,10 +26,7 @@ terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/wo
 
     stage('Check') {
       steps {
-        sh '''/home/ubuntu/copy.sh
-create database devops;
-exit
-/home/ubuntu/dump.sh'''
+        sh '/home/ubuntu/copy.sh'
         sh '''cd /var/lib/jenkins/workspace/
 terraform output > id.txt
 sed \'s/ //g\' id.txt > newid.txt
