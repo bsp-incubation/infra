@@ -14,7 +14,9 @@ aws elbv2 describe-load-balancers --names CRBS-internal
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$UI_asg"
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$API_asg"
 aws ec2 describe-db-instances --filters "Name=db-instance-id,Values=$CRBS2_rds_instance_id" --query 'SecurityGroups[*].[DBInstanceIdentifier][*]'
-
+aws deploy get-application --application-name "$aws_codedeploy_app"
+aws deploy get-deployment-group --application-name "$aws_codedeploy_app" --deployment-group-name "$aws_codedeploy_deployment_group_UI"
+aws deploy get-deployment-group --application-name "$aws_codedeploy_app" --deployment-group-name "$aws_codedeploy_deployment_group_API"
 
 
 # aws ec2 describe-subnets --filters "Name=subnet-id,Values=$public_subnet_2a_id" --query 'Subnets[*].[Tags][*][*][0].Value'
