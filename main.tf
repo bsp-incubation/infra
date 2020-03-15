@@ -146,7 +146,7 @@ resource "aws_route_table" "CRBS-route_table-private" {
   }
   route {
     cidr_block     = "172.31.0.0/16"
-    vpc_peering_connection_id = "${aws_vpc_peering_connection.peCRBS-vpc-peeringer.id}"
+    vpc_peering_connection_id = "${aws_vpc_peering_connection.CRBS-vpc-peering.id}"
   }
   tags = { Name = "CRBS-private" }
 }
@@ -160,7 +160,7 @@ resource "aws_route_table_association" "CRBS-route_table_association-private-a" 
 resource "aws_route" "default_vpc_routing" {
   route_table_id            = "rtb-3b32a450"
   destination_cidr_block    = "172.16.0.0/16"
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.peCRBS-vpc-peeringer.id}"
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.CRBS-vpc-peering.id}"
 }
 
 # ================ 데모 변동사항
