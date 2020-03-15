@@ -20,6 +20,7 @@ resource "aws_vpc" "CRBS-vpc" {
 resource "aws_vpc_peering_connection" "CRBS-vpc-peering" {
   peer_vpc_id   = "vpc-3a61a851"
   vpc_id        = "${aws_vpc.CRBS-vpc.id}"
+  tags = { Name="CRBS-vpc-peering" }  //태그 달아줌
 }
 
 # Accepter's side of the connection
