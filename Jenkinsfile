@@ -28,7 +28,9 @@ terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/wo
       steps {
         sh '''cd /var/lib/jenkins/workspace/
 terraform output > id.txt
-sed \'s/ //g\' id.txt > newid.txt'''
+sed \'s/ //g\' id.txt > newid.txt
+terraform output -json | jq \'.CRBS2_internal_dns_name\' > front.json
+terraform output -json | jq \'.CRBS2_rds_instance_address\' > back.json'''
         sh '''cd /var/lib/jenkins/workspace/infra_master
 cp key.sh /var/lib/jenkins/workspace
 cp cli.sh /var/lib/jenkins/workspace
