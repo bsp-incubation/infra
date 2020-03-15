@@ -24,7 +24,7 @@ resource "aws_vpc_peering_connection" "CRBS-vpc-peering" {
 
 # Accepter's side of the connection
 resource "aws_vpc_peering_connection_accepter" "CRBS-vpc-peering-accepter" {
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.peCRBS-vpc-peeringer.id}"
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.CRBS-vpc-peering.id}"
   auto_accept               = true
 
   tags = {
