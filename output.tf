@@ -53,7 +53,7 @@ output "CRBS2_rds_instance_address" {
 }
 
 output "CRBS2_rds_instance_id" {
-  value="${aws_db_instance.CRBS-rds-instance.arn}"
+  value="${aws_db_instance.CRBS-rds-instance.identifier}"
 }
 
 output "aws_codedeploy_app" {
