@@ -16,6 +16,22 @@ resource "aws_vpc" "CRBS-vpc" {
   tags = { Name="CRBS-vpc" }  //태그 달아줌
 }
 
+# VPC peering 설정
+resource "aws_vpc_peering_connection" "CRBS-vpc-peering" {
+  peer_vpc_id   = "vpc-3a61a851"
+  vpc_id        = "${aws_vpc.CRBS-vpc.id}"
+}
+
+# Accepter's side of the connection
+resource "aws_vpc_peering_connection_accepter" "CRBS-vpc-peering-accepter" {
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.peCRBS-vpc-peeringer.id}"
+  auto_accept               = true
+
+  tags = {
+    Side = "Accepter"
+  }
+}
+
 // 서브넷 설정
 # 다음과 같이 2개의 AZ에 public, private subnet을 각각 1개씩 생성한다.
 # ${aws_vpc.dev.id} 는 aws_vpc의 dev리소스로부터 id값을 가져와서 세팅한다.
@@ -128,12 +144,23 @@ resource "aws_route_table" "CRBS-route_table-private" {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.CRBS-natgateway.id
   }
+  route {
+    cidr_block     = "172.31.0.0/16"
+    vpc_peering_connection_id = "${aws_vpc_peering_connection.peCRBS-vpc-peeringer.id}"
+  }
   tags = { Name = "CRBS-private" }
 }
 
 resource "aws_route_table_association" "CRBS-route_table_association-private-a" {
   subnet_id      = aws_subnet.CRBS-subnet-private-a.id
   route_table_id = aws_route_table.CRBS-route_table-private.id
+}
+
+# vpc peering 대상 route table
+resource "aws_route" "default_vpc_routing" {
+  route_table_id            = "rtb-3b32a450"
+  destination_cidr_block    = "172.16.0.0/16"
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.peCRBS-vpc-peeringer.id}"
 }
 
 # ================ 데모 변동사항
@@ -576,6 +603,12 @@ resource "aws_security_group" "CRBS-security_group-private" {
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = ["172.16.0.0/16"]
+  }
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["172.31.33.134/32"]
   }
   ingress {
     from_port   = 3000
