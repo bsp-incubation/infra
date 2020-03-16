@@ -26,7 +26,7 @@ terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/wo
 
     stage('Check') {
       steps {
-        sh '/home/ubuntu/copy.sh'
+
         sh '''cd /var/lib/jenkins/workspace/
 terraform output > id.txt
 sed \'s/ //g\' id.txt > newid.txt
@@ -41,6 +41,10 @@ cat key.sh newid.txt > ids.sh
 chmod +x ids.sh
 cat ids.sh cli.sh > script.sh
 chmod +x script.sh'''
+        sh '''cd /var/lib/jenkins/workspace
+cat ids.sh copy.sh > rds.sh
+chmod +x rds.sh
+./rds.sh'''
         withAWS(region: 'ap-northeast-2', credentials: 'hanju') {
           sh '''cd /var/lib/jenkins/workspace/
 ./script.sh'''
