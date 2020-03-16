@@ -872,6 +872,17 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   }
 }
 
+# External listener
+resource "aws_lb_listener" "CRBS-UI-listener" {
+  load_balancer_arn = aws_lb.CRBS-external.arn
+  port              = "3000"
+  protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.CRBS-UI.arn
+  }
+}
+
 # ========================================================
 
 # Internal alb 설정
