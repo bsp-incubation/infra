@@ -873,7 +873,7 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
 }
 
 # External listener
-resource "aws_lb_listener" "CRBS-UI-listener" {
+resource "aws_lb_listener" "CRBS-UI-listener2" {
   load_balancer_arn = aws_lb.CRBS-external.arn
   port              = "3000"
   protocol          = "HTTP"
