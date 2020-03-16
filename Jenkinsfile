@@ -49,12 +49,5 @@ chmod +x script.sh'''
       }
     }
 
-    stage('Destroy') {
-      steps {
-        sh '''cd /var/lib/jenkins/workspace
-terraform destroy -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master'''
-      }
-    }
-
   }
 }
