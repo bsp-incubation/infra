@@ -1222,7 +1222,10 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name  = "CRBS-UI-deployment-group"
   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+#     ====================데모 
+#   autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+  autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
+
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1260,7 +1263,10 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "CRBS-API-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
+#     ================================데모 
+#   autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
+  autoscaling_groups                = [aws_autoscaling_group.new-API-asg.name]
+
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1294,79 +1300,79 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
 }
 
 # ======================== 데모 변동 사항 =============================
-resource "aws_codedeploy_deployment_group" "CRBS-new-UI-deployment-group" {
-  app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name  = "CRBS-new-UI-deployment-group"
-  service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
+# resource "aws_codedeploy_deployment_group" "CRBS-new-UI-deployment-group" {
+#   app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
+#   deployment_config_name = "CodeDeployDefault.AllAtOnce"
+#   deployment_group_name  = "CRBS-new-UI-deployment-group"
+#   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+#   autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
+#   blue_green_deployment_config {
+#     deployment_ready_option {
+#       action_on_timeout = "CONTINUE_DEPLOYMENT"
+#     }
+#     terminate_blue_instances_on_deployment_success {
+#       action                           = "TERMINATE"
+#       termination_wait_time_in_minutes = 5
+#     }
+#     green_fleet_provisioning_option {
+#       action                            = "COPY_AUTO_SCALING_GROUP"
 
-    }
+#     }
 
-  }
-  auto_rollback_configuration {
-    enabled = false
-  }
+#   }
+#   auto_rollback_configuration {
+#     enabled = false
+#   }
 
-  deployment_style {
-    deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
-  }
+#   deployment_style {
+#     deployment_option = "WITH_TRAFFIC_CONTROL"
+#     deployment_type   = "BLUE_GREEN"
+#   }
 
-  load_balancer_info {
-    target_group_info {
+#   load_balancer_info {
+#     target_group_info {
 
-        name = "${aws_lb_target_group.CRBS-UI.name}"
+#         name = "${aws_lb_target_group.CRBS-UI.name}"
 
-    }
-  }
-}
+#     }
+#   }
+# }
 
 # ==================== api =============================
-resource "aws_codedeploy_deployment_group" "CRBS-new-API-deployment-group" {
-  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "CRBS-new-API-deployment-group"
-  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  autoscaling_groups                = [aws_autoscaling_group.new-API-asg.name]
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
+# resource "aws_codedeploy_deployment_group" "CRBS-new-API-deployment-group" {
+#   app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+#   deployment_config_name = "CodeDeployDefault.AllAtOnce"
+#   deployment_group_name = "CRBS-new-API-deployment-group"
+#   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+#   autoscaling_groups                = [aws_autoscaling_group.new-API-asg.name]
+#   blue_green_deployment_config {
+#     deployment_ready_option {
+#       action_on_timeout = "CONTINUE_DEPLOYMENT"
+#     }
+#     terminate_blue_instances_on_deployment_success {
+#       action                           = "TERMINATE"
+#       termination_wait_time_in_minutes = 5
+#     }
+#     green_fleet_provisioning_option {
+#       action                            = "COPY_AUTO_SCALING_GROUP"
 
-    }
+#     }
 
-  }
+#   }
 
-    auto_rollback_configuration {
-    enabled = false
-  }
+#     auto_rollback_configuration {
+#     enabled = false
+#   }
 
-  deployment_style {
-    deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
-  }
+#   deployment_style {
+#     deployment_option = "WITH_TRAFFIC_CONTROL"
+#     deployment_type   = "BLUE_GREEN"
+#   }
 
-  load_balancer_info {
-    target_group_info {
-        name = "${aws_lb_target_group.CRBS-API.name}"
-    }
-  }
-}
+#   load_balancer_info {
+#     target_group_info {
+#         name = "${aws_lb_target_group.CRBS-API.name}"
+#     }
+#   }
+# }
 
