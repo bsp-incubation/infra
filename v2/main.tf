@@ -657,7 +657,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
   stickiness {
     type                = "lb_cookie"
     cookie_duration     = 600
-    enabled             = "true"
+    enabled             = "false"
   }
 
   health_check {
