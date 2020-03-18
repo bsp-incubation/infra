@@ -1231,9 +1231,9 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name  = "CRBS-UI-deployment-group"
   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+
   autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
   # autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
-
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -1271,6 +1271,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "CRBS-API-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+
   autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
   # autoscaling_groups                = [aws_autoscaling_group.new-API-asg.name]
 
@@ -1305,7 +1306,9 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   }
 }
 
-# ======================== 데모 사항 =============================
+
+# ======================== 데모 변동 사항 =============================
+
 # resource "aws_codedeploy_deployment_group" "CRBS-new-UI-deployment-group" {
 #   app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
 #   deployment_config_name = "CodeDeployDefault.AllAtOnce"
@@ -1364,6 +1367,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
 
 #     }
 
+
 #   }
 
 #     auto_rollback_configuration {
@@ -1374,6 +1378,13 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
 #     deployment_option = "WITH_TRAFFIC_CONTROL"
 #     deployment_type   = "BLUE_GREEN"
 #   }
+
+#   load_balancer_info {
+#     target_group_info {
+#         name = "${aws_lb_target_group.CRBS-API.name}"
+#     }
+#   }
+# }
 
 #   load_balancer_info {
 #     target_group_info {

@@ -82,6 +82,7 @@ output "aws_codedeploy_deployment_group_API" {
 #   value="${aws_autoscaling_group.new-UI-asg.name}"
 # }
 
+
 # output "new_API_asg" {
 #   value="${aws_autoscaling_group.new-API-asg.name}"
 # }
