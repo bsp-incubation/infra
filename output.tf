@@ -67,22 +67,3 @@ output "aws_codedeploy_deployment_group_UI" {
 output "aws_codedeploy_deployment_group_API" {
   value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group.deployment_group_name}"
 }
-
-
-# 데모 변동
-
-# output "public_subnet_2a_id" {
-#   value="${aws_subnet.CRBS2-subnet-public-2a.id}"
-# }
-# output "private_subnet_2a_id" {
-#   value="${aws_subnet.CRBS2-subnet-private-2a.id}"
-# }
-
-# output "new_UI_asg" {
-#   value="${aws_autoscaling_group.new-UI-asg.name}"
-# }
-
-
-# output "new_API_asg" {
-#   value="${aws_autoscaling_group.new-API-asg.name}"
-# }

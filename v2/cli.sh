@@ -21,5 +21,3 @@ aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$API_asg
 # 데모 변동
 aws ec2 describe-subnets --filters "Name=subnet-id,Values=$public_subnet_2a_id" --query 'Subnets[*].[Tags][*][*][0].Value'
 aws ec2 describe-subnets --filters "Name=subnet-id,Values=$private_subnet_2a_id" --query 'Subnets[*].[Tags][*][*][0].Value'
-# aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$new_UI_asg"
-# aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name "$new_API_asg"

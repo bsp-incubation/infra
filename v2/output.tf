@@ -77,11 +77,3 @@ output "public_subnet_2a_id" {
 output "private_subnet_2a_id" {
   value="${aws_subnet.CRBS-subnet-private-2a.id}"
 }
-
-# output "new_UI_asg" {
-#   value="${aws_autoscaling_group.new-UI-asg.name}"
-# }
-
-# output "new_API_asg" {
-#   value="${aws_autoscaling_group.new-API-asg.name}"
-# }
