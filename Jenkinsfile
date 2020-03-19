@@ -21,8 +21,8 @@ terraform init -lock=false /var/lib/jenkins/workspace/infra_master'''
 terraform plan -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master/v2
 '''
         sh '''cd /var/lib/jenkins/workspace
-#terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master
-terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master/v2
+terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master
+#terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master/v2
 #terraform destroy -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/workspace/infra_master
 '''
       }
