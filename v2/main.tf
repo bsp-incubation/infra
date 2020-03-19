@@ -671,6 +671,31 @@ resource "aws_lb_target_group" "CRBS-UI" {
   tags = { Name = "CRBS-UI" }
 }
 
+# External alb target group 설정
+resource "aws_lb_target_group" "CRBS-UI2" {
+  name     = "CRBS-UI2"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.CRBS-vpc.id
+  target_type = "instance"
+
+  stickiness {
+    type                = "lb_cookie"
+    cookie_duration     = 600
+    enabled             = "false"
+  }
+
+  health_check {
+    healthy_threshold   = 10
+    unhealthy_threshold = 2
+    timeout             = 5
+    path                = var.target_group_external_path
+    interval            = 10
+    port                = 8080
+  }
+  tags = { Name = "CRBS-UI2" }
+}
+
 # External listener
 resource "aws_lb_listener" "CRBS-UI-listener" {
   load_balancer_arn = aws_lb.CRBS-external.arn
@@ -682,15 +707,22 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   }
 }
 
-# External listener
-resource "aws_lb_listener" "CRBS-UI-listener2" {
-  load_balancer_arn = aws_lb.CRBS-external.arn
-  port              = "3000"
-  protocol          = "HTTP"
-  default_action {
+
+# External listener rule
+
+resource "aws_lb_listener_rule" "host_based_routing" {
+  listener_arn = "${aws_lb_listener.CRBS-UI-listener.arn}"
+
+  action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.CRBS-UI.arn
+    target_group_arn = "${aws_lb_target_group.CRBS-UI.arn}"
   }
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.CRBS-UI2.arn}"
+  }
+
 }
 
 # ========================================================
