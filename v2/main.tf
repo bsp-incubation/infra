@@ -1002,7 +1002,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
 
   load_balancer_info {
     target_group_info {
-        name = "${aws_lb_target_group.CRBS-UI.name}"
+        name = "${aws_lb_target_group.CRBS-UI2.name}"
     }
   }
 }
