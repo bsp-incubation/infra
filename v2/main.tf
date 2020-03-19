@@ -849,8 +849,8 @@ resource "aws_launch_template" "API-template" {
 # =============================================autoscaling group=============================================
 
 # ====================================데모 사항 new-UI autoscaling group=====================================
-resource "aws_autoscaling_group" "new-UI-asg" {
-  name               = "new-UI-asg"
+resource "aws_autoscaling_group" "UI-asg" {
+  name               = "UI-asg"
   desired_capacity   = 2
   max_size           = 4
   min_size           = 2
@@ -869,24 +869,24 @@ resource "aws_autoscaling_group" "new-UI-asg" {
   }
   tag {
     key                 = "Name"
-    value               = "new-UI-asg"
+    value               = "UI-asg"
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_policy" "new-UI-asg-policy" {
-  name                   = "new-UI-asg-policy"
+resource "aws_autoscaling_policy" "UI-asg-policy" {
+  name                   = "UI-asg-policy"
   scaling_adjustment     = 80
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.new-UI-asg.name}"
+  autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
 }
 
 
 
 # =============================================데모 사항 new-API autoscaling group=============================================
-resource "aws_autoscaling_group" "new-API-asg" {
-  name               = "new-API-asg"
+resource "aws_autoscaling_group" "API-asg" {
+  name               = "API-asg"
   desired_capacity   = 2
   max_size           = 4
   min_size           = 2
@@ -905,17 +905,17 @@ resource "aws_autoscaling_group" "new-API-asg" {
   }
   tag {
     key                 = "Name"
-    value               = "new-API-asg"
+    value               = "API-asg"
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_policy" "new-API-asg-policy" {
-  name                   = "new-API-asg-policy"
+resource "aws_autoscaling_policy" "API-asg-policy" {
+  name                   = "API-asg-policy"
   scaling_adjustment     = 80
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.new-API-asg.name}"
+  autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
 }
 
 
@@ -957,9 +957,8 @@ resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name  = "CRBS-UI-deployment-group"
   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  # autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
-  autoscaling_groups     = [aws_autoscaling_group.new-UI-asg.name]
-
+  autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+ 
 
   blue_green_deployment_config {
     deployment_ready_option {
@@ -997,8 +996,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
   deployment_group_name = "CRBS-API-deployment-group"
   service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
-  # autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
-  autoscaling_groups                = [aws_autoscaling_group.new-API-asg.name]
+  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
 
   blue_green_deployment_config {
     deployment_ready_option {
