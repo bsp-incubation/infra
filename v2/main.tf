@@ -916,7 +916,7 @@ resource "aws_autoscaling_group" "API-asg" {
   termination_policies      = ["default"]
   # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
   launch_template {
-    id      = "${aws_launch_template.UI-template.id}"
+    id      = "${aws_launch_template.API-template.id}"
     version = "$Latest"
   }
   tag {
