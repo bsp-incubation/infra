@@ -333,6 +333,14 @@ resource "aws_network_acl" "CRBS-acl-private" {
   }
   ingress {
     protocol   = "tcp"
+    rule_no    = 121
+    action     = "allow"
+    cidr_block = "172.31.33.134/32"
+    from_port  = 3306
+    to_port    = 3306
+  }
+  ingress {
+    protocol   = "tcp"
     rule_no    = 130
     action     = "allow"
     cidr_block = "172.16.0.0/16"
