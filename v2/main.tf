@@ -702,10 +702,14 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   load_balancer_arn = aws_lb.CRBS-external.arn
   port              = "8080"
   protocol          = "HTTP"
-  default_action {
+  default_action    = [{
     type             = "forward"
-    target_group_arn = [aws_lb_target_group.CRBS-UI.arn,aws_lb_target_group.CRBS-UI2.arn]
-  }
+    target_group_arn = aws_lb_target_group.CRBS-UI.arn
+  },
+     {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.CRBS-UI2.arn
+  } ]
 }
 
 # ========================================================
