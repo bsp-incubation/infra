@@ -848,72 +848,76 @@ resource "aws_launch_template" "API-template" {
 
 # =============================================autoscaling group=============================================
 
-# =============================================UI autoscaling group=============================================
-resource "aws_autoscaling_group" "UI-asg" {
-  name               = "UI-asg"
+# ====================================데모 사항 new-UI autoscaling group=====================================
+resource "aws_autoscaling_group" "new-UI-asg" {
+  name               = "new-UI-asg"
   desired_capacity   = 2
   max_size           = 4
   min_size           = 2
+  # health_check_type         = "ELB"
   health_check_grace_period = 300
 
-    # 데모 변동 사항====================
-    vpc_zone_identifier       = [
+  vpc_zone_identifier       = [
     "${aws_subnet.CRBS-subnet-public-c.id}", 
     "${aws_subnet.CRBS-subnet-public-2a.id}"
     ]
-# ================================================
   termination_policies      = ["default"]
+  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
   launch_template {
     id      = "${aws_launch_template.UI-template.id}"
     version = "$Latest"
   }
   tag {
     key                 = "Name"
-    value               = "UI-asg2"
+    value               = "new-UI-asg"
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_policy" "UI-asg-policy" {
-  name                   = "UI-asg-policy"
+resource "aws_autoscaling_policy" "new-UI-asg-policy" {
+  name                   = "new-UI-asg-policy"
   scaling_adjustment     = 80
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
+  autoscaling_group_name = "${aws_autoscaling_group.new-UI-asg.name}"
 }
 
 
-# =============================================API autoscaling group=============================================
-resource "aws_autoscaling_group" "API-asg" {
-  name               = "API-asg"
+
+# =============================================데모 사항 new-API autoscaling group=============================================
+resource "aws_autoscaling_group" "new-API-asg" {
+  name               = "new-API-asg"
   desired_capacity   = 2
   max_size           = 4
   min_size           = 2
+  # health_check_type         = "ELB"
   health_check_grace_period = 300
-    # 데모 변동사항====================
-    vpc_zone_identifier       = [
+
+  vpc_zone_identifier       = [
     "${aws_subnet.CRBS-subnet-private-c.id}", 
     "${aws_subnet.CRBS-subnet-private-2a.id}"
     ]
   termination_policies      = ["default"]
+  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
   launch_template {
-    id      = "${aws_launch_template.API-template.id}"
+    id      = "${aws_launch_template.UI-template.id}"
     version = "$Latest"
   }
   tag {
     key                 = "Name"
-    value               = "API-asg2"
+    value               = "new-API-asg"
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_policy" "API-asg-policy" {
-  name                   = "API-asg-policy"
+resource "aws_autoscaling_policy" "new-API-asg-policy" {
+  name                   = "new-API-asg-policy"
   scaling_adjustment     = 80
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
+  autoscaling_group_name = "${aws_autoscaling_group.new-API-asg.name}"
 }
+
 
 
 # ====================================================create RDS========================================
