@@ -704,8 +704,7 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.CRBS-UI.arn
-    target_group_arn = aws_lb_target_group.CRBS-UI2.arn
+    target_group_arn = [aws_lb_target_group.CRBS-UI.arn,aws_lb_target_group.CRBS-UI2.arn]
   }
 }
 
