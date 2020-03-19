@@ -402,7 +402,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 100
     action     = "allow"
-    cidr_block = "172.16.1.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 80
     to_port    = 80
   }
@@ -410,7 +410,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 110
     action     = "allow"
-    cidr_block = "172.16.1.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 443
     to_port    = 443
   }
@@ -418,7 +418,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 120
     action     = "allow"
-    cidr_block = "172.16.1.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 22
     to_port    = 22
   }
@@ -426,7 +426,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 130
     action     = "allow"
-    cidr_block = "172.16.1.0/24"
+    cidr_block = "0.0.0.0/0"
     from_port  = 1024
     to_port    = 65535
   }
@@ -434,7 +434,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 160
     action     = "allow"
-    cidr_block = "172.16.2.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 8090
     to_port    = 8090
   }
@@ -442,7 +442,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 140
     action     = "allow"
-    cidr_block = "172.16.1.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 8080
     to_port    = 8080
   }
