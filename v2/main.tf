@@ -671,6 +671,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
   tags = { Name = "CRBS-UI" }
 }
 
+
 # External alb target group 설정
 resource "aws_lb_target_group" "CRBS-UI2" {
   name     = "CRBS-UI2"
@@ -704,25 +705,9 @@ resource "aws_lb_listener" "CRBS-UI-listener" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.CRBS-UI.arn
-  }
-}
-
-
-# External listener rule
-
-resource "aws_lb_listener_rule" "host_based_routing" {
-  listener_arn = "${aws_lb_listener.CRBS-UI-listener.arn}"
-
-  action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.CRBS-UI.arn}"
+    target_group_arn = aws_lb_target_group.CRBS-UI2.arn
   }
-
-  action {
-    type             = "forward"
-    target_group_arn = "${aws_lb_target_group.CRBS-UI2.arn}"
-  }
-
 }
 
 # ========================================================
