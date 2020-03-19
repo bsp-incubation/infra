@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Git cloning') {
       steps {
-        git(url: 'https://github.com/bsp-incubation/infra.git', credentialsId: 'cjm95')
+        git(url: 'https://github.com/bsp-incubation/infra.git', credentialsId: 'infra', poll: true)
       }
     }
 
