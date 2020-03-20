@@ -385,7 +385,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 110
     action     = "allow"
-    cidr_block = "172.16.0.0/16"
+    cidr_block = "0.0.0.0/0"
     from_port  = 443
     to_port    = 443
   }
@@ -781,7 +781,7 @@ resource "aws_lb_target_group" "CRBS-UI" {
   stickiness {
     type                = "lb_cookie"
     cookie_duration     = 600
-    enabled             = "true"
+    enabled             = "false"
   }
 
   health_check {
