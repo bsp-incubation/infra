@@ -75,7 +75,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group1" {
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
+    deployment_type   = "IN_PLACE"
   }
 
   load_balancer_info {
@@ -100,7 +100,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group2" {
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
+    deployment_type   = "IN_PLACE"
   }
 
   load_balancer_info {
