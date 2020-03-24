@@ -48,6 +48,6 @@ variable "target_group_internal_path" {
     default = "/health"
 }
 
-variable "CRBS-route_table-public" {
+variable "CRBS-security_group-public" {
     type    = string
 }

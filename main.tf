@@ -88,5 +88,5 @@ module "api" {
   # aws_codedeploy_app
   CRBS-codedeploy-app = module.crbs.aws_codedeploy_app
 
-  CRBS-route_table-public = module.ui.security_group_public_id
+  CRBS-security_group-public = module.ui.security_group_public_id
 }

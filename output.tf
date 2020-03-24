@@ -72,15 +72,15 @@ output "API_tg2" {
 }
 
 output "CRBS_rds_instance_id" {
-  value=module.crbs.CRBS-rds-instance
+  value=module.crbs.CRBS_rds_instance_id
 }
 
 output "CRBS_rds_instance_address" {
-  value=module.crbs.CRBS-rds-instance
+  value=module.crbs.CRBS_rds_instance_address
 }
 
 output "aws_codedeploy_app" {
-  value=module.crbs.CRBS-codedeploy-app
+  value=module.crbs.aws_codedeploy_app
 }
 
 output "dg_UI1" {
