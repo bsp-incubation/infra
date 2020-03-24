@@ -8,9 +8,6 @@ output "ex_lb_arn" {
   value="${aws_lb.CRBS-external.arn}"
 }
 
-output "in_lb_arn" {
-  value="${aws_lb.CRBS-internal.arn}"
-}
 output "CRBS_rds_instance_id" {
   value="${aws_db_instance.CRBS-rds-instance.identifier}"
 }

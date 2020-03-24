@@ -5,7 +5,7 @@
 
 resource "aws_subnet" "CRBS-subnet-private-a" {
   vpc_id            = var.vpc_id
-  availability_zone = var.my_az1
+  availability_zone = var.availability_zone1
   cidr_block        = "172.16.3.0/24"
   map_public_ip_on_launch   = false
   tags = { Name = "CRBS-subnet-private-a" }
@@ -13,7 +13,7 @@ resource "aws_subnet" "CRBS-subnet-private-a" {
 
 resource "aws_subnet" "CRBS-subnet-private-c" {
   vpc_id            = var.vpc_id
-  availability_zone = var.my_az2
+  availability_zone = var.availability_zone12
   cidr_block        = "172.16.4.0/24"
   map_public_ip_on_launch   = false
   tags = { Name = "CRBS-subnet-private-c" }
