@@ -31,6 +31,7 @@ terraform apply -auto-approve -lock=false -var-file=var.json /var/lib/jenkins/wo
     stage('Check') {
       steps {
         sh '''cd /var/lib/jenkins/workspace/
+terraform init -lock=false /var/lib/jenkins/workspace/infra_master
 terraform output > id.txt
 sed \'s/ //g\' id.txt > newid.txt
 terraform output -json | jq \'.CRBS_external_dns_name\' > front1.json
