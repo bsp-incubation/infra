@@ -42,7 +42,7 @@ resource "aws_subnet" "CRBS-subnet-public-a" {
   availability_zone         = var.my_az1
   cidr_block                = "172.16.1.0/24"
   map_public_ip_on_launch   = true
-  tags = { Name = "CRBS-public-a" }
+  tags = { Name = "CRBS-subnet-public-a" }
 }
 
 resource "aws_subnet" "CRBS-subnet-private-a" {
@@ -50,7 +50,7 @@ resource "aws_subnet" "CRBS-subnet-private-a" {
   availability_zone = var.my_az1
   cidr_block        = "172.16.3.0/24"
   map_public_ip_on_launch   = false
-  tags = { Name = "CRBS-private-a" }
+  tags = { Name = "CRBS-subnet-private-a" }
 }
 
 
@@ -60,7 +60,7 @@ resource "aws_subnet" "CRBS-subnet-public-c" {
   availability_zone = var.my_az2
   cidr_block        = "172.16.2.0/24"
   map_public_ip_on_launch   = true
-  tags = { Name = "CRBS-public-c" }
+  tags = { Name = "CRBS-subnet-public-c" }
 }
 
 resource "aws_subnet" "CRBS-subnet-private-c" {
@@ -68,7 +68,7 @@ resource "aws_subnet" "CRBS-subnet-private-c" {
   availability_zone = var.my_az2
   cidr_block        = "172.16.4.0/24"
   map_public_ip_on_launch   = false
-  tags = { Name = "CRBS-private-c" }
+  tags = { Name = "CRBS-subnet-private-c" }
 }
 
 # dev VPC에서 사용할 IGW를 정의한다.
@@ -105,7 +105,7 @@ resource "aws_route_table" "CRBS-route_table-public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.CRBS-igw.id
   }
-  tags = { Name = "CRBS-public" }
+  tags = { Name = "CRBS-route_table-public" }
 }
 
 resource "aws_route_table_association" "CRBS-route_table_associationpublic-a" {
@@ -129,7 +129,7 @@ resource "aws_route_table" "CRBS-route_table-private" {
     cidr_block     = "172.31.0.0/16"
     vpc_peering_connection_id = "${aws_vpc_peering_connection.CRBS-vpc-peering.id}"
   }
-  tags = { Name = "CRBS-private" }
+  tags = { Name = "CRBS-route_table-private" }
 }
 
 resource "aws_route_table_association" "CRBS-route_table_association-private-a" {
@@ -282,7 +282,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     icmp_type = -1
     icmp_code = -1
   }
-  tags = { Name = "CRBS-public" }
+  tags = { Name = "CRBS-acl-public" }
 }
 
 resource "aws_network_acl" "CRBS-acl-private" {
@@ -423,12 +423,12 @@ resource "aws_network_acl" "CRBS-acl-private" {
     icmp_type = -1
     icmp_code = -1
   }
-  tags = { Name = "CRBS-private" }
+  tags = { Name = "CRBS-acl-private" }
 }
 
 # 보안 그룹
 resource "aws_security_group" "CRBS-security_group-public" {
-  name        = "CRBS-public"
+  name        = "CRBS-security_group-public"
   description = "security_group for public"
   vpc_id      = aws_vpc.CRBS-vpc.id
   ingress {
@@ -523,11 +523,11 @@ resource "aws_security_group" "CRBS-security_group-public" {
     to_port    = "-1"
     description = "for ping test"
   }
-  tags = { Name = "CRBS-public" }
+  tags = { Name = "CRBS-security_group-public" }
 }
 
 resource "aws_security_group" "CRBS-security_group-private" {
-  name        = "CRBS-private"
+  name        = "CRBS-security_group-private"
   description = "security_group for private"
   vpc_id      = aws_vpc.CRBS-vpc.id
   ingress {
@@ -622,7 +622,7 @@ resource "aws_security_group" "CRBS-security_group-private" {
     to_port    = "-1"
     description = "for ping test"
   }
-  tags = { Name = "CRBS-private" }
+  tags = { Name = "CRBS-security_group-private" }
 }
 
 # =========================================================AMI=======================================================
