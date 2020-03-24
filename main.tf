@@ -236,15 +236,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     protocol   = "tcp"
     rule_no    = 120
     action     = "allow"
-    cidr_block = "172.16.3.0/24"
-    from_port  = 22
-    to_port    = 22
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 121
-    action     = "allow"
-    cidr_block = "172.16.4.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 22
     to_port    = 22
   }
@@ -276,15 +268,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     protocol   = "tcp"
     rule_no    = 150
     action     = "allow"
-    cidr_block = "172.16.3.0/24"
-    from_port  = 3306
-    to_port    = 3306
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 151
-    action     = "allow"
-    cidr_block = "172.16.4.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 3306
     to_port    = 3306
   }
@@ -351,9 +335,9 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 140
     action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 1024
-    to_port    = 65535
+    cidr_block = "52.0.0.0/8"
+    from_port  = 40000
+    to_port    = 50000
   }
     ingress {
     protocol   = "tcp"
@@ -771,8 +755,8 @@ resource "aws_lb" "CRBS-external" {
 }
 
 # External alb target group 설정
-resource "aws_lb_target_group" "CRBS-UI" {
-  name     = "CRBS-UI"
+resource "aws_lb_target_group" "CRBS-UI1" {
+  name     = "CRBS-UI1"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
@@ -792,7 +776,32 @@ resource "aws_lb_target_group" "CRBS-UI" {
     interval            = 10
     port                = 8080
   }
-  tags = { Name = "CRBS-UI" }
+  tags = { Name = "CRBS-UI1" }
+}
+
+# External alb target group 설정
+resource "aws_lb_target_group" "CRBS-UI2" {
+  name     = "CRBS-UI2"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.CRBS-vpc.id
+  target_type = "instance"
+
+  stickiness {
+    type                = "lb_cookie"
+    cookie_duration     = 600
+    enabled             = "false"
+  }
+
+  health_check {
+    healthy_threshold   = 10
+    unhealthy_threshold = 2
+    timeout             = 5
+    path                = var.target_group_external_path
+    interval            = 10
+    port                = 8080
+  }
+  tags = { Name = "CRBS-UI2" }
 }
 
 # External listener
@@ -825,8 +834,8 @@ resource "aws_lb" "CRBS-internal" {
 }
 
 # Internal alb target group 설정
-resource "aws_lb_target_group" "CRBS-API" {
-  name     = "CRBS-API"
+resource "aws_lb_target_group" "CRBS-API1" {
+  name     = "CRBS-API1"
   port     = 8090
   protocol = "HTTP"
   vpc_id   = aws_vpc.CRBS-vpc.id
@@ -839,7 +848,24 @@ resource "aws_lb_target_group" "CRBS-API" {
     interval            = 10
     port                = 8090
   }
-  tags = { Name = "CRBS-API" }
+  tags = { Name = "CRBS-API1" }
+}
+
+resource "aws_lb_target_group" "CRBS-API2" {
+  name     = "CRBS-API2"
+  port     = 8090
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.CRBS-vpc.id
+  target_type = "instance"
+  health_check {
+    healthy_threshold   = 10
+    unhealthy_threshold = 2
+    timeout             = 5
+    path                = var.target_group_internal_path
+    interval            = 10
+    port                = 8090
+  }
+  tags = { Name = "CRBS-API2" }
 }
 
 # Internal listener
@@ -958,12 +984,45 @@ resource "aws_launch_template" "API-template" {
 # =============================================autoscaling group=============================================
 
 # =============================================UI autoscaling group=============================================
-resource "aws_autoscaling_group" "UI-asg" {
-  name               = "UI-asg"
+resource "aws_autoscaling_group" "UI-asg1" {
+  name               = "UI-asg1"
   desired_capacity   = 2
   max_size           = 4
   min_size           = 2
-  # health_check_type         = "ELB"
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
+  vpc_zone_identifier       = [
+    "${aws_subnet.CRBS-subnet-public-c.id}", 
+    "${aws_subnet.CRBS-subnet-public-a.id}"
+    ]
+
+  termination_policies      = ["default"]
+  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+  launch_template {
+    id      = "${aws_launch_template.UI-template.id}"
+    version = "$Latest"
+  }
+  tag {
+    key                 = "Name"
+    value               = "UI-asg1"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "UI-asg1-policy" {
+  name                   = "UI-asg1-policy"
+  scaling_adjustment     = 80
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = "${aws_autoscaling_group.UI-asg1.name}"
+}
+
+resource "aws_autoscaling_group" "UI-asg2" {
+  name               = "UI-asg2"
+  desired_capacity   = 2
+  max_size           = 4
+  min_size           = 2
+  health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = [
     "${aws_subnet.CRBS-subnet-public-c.id}", 
@@ -983,22 +1042,55 @@ resource "aws_autoscaling_group" "UI-asg" {
   }
 }
 
-resource "aws_autoscaling_policy" "UI-asg-policy" {
-  name                   = "UI-asg-policy"
+resource "aws_autoscaling_policy" "UI-asg2-policy" {
+  name                   = "UI-asg2-policy"
   scaling_adjustment     = 80
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.UI-asg.name}"
+  autoscaling_group_name = "${aws_autoscaling_group.UI-asg2.name}"
 }
 
 
 # =============================================API autoscaling group=============================================
-resource "aws_autoscaling_group" "API-asg" {
-  name               = "API-asg"
+resource "aws_autoscaling_group" "API-asg1" {
+  name               = "API-asg1"
   desired_capacity   = 2
   max_size           = 4
   min_size           = 2
-  # health_check_type         = "ELB"
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
+  vpc_zone_identifier       = [
+    "${aws_subnet.CRBS-subnet-private-c.id}", 
+    "${aws_subnet.CRBS-subnet-private-a.id}"
+    ]
+
+  termination_policies      = ["default"]
+  # target_group_arns  = ["${aws_lb_target_group.CRBS-UI.arn}"]
+  launch_template {
+    id      = "${aws_launch_template.API-template.id}"
+    version = "$Latest"
+  }
+  tag {
+    key                 = "Name"
+    value               = "API-asg1"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "API-asg1-policy" {
+  name                   = "API-asg1-policy"
+  scaling_adjustment     = 80
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = "${aws_autoscaling_group.API-asg1.name}"
+}
+
+resource "aws_autoscaling_group" "API-asg2" {
+  name               = "API-asg2"
+  desired_capacity   = 2
+  max_size           = 4
+  min_size           = 2
+  health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = [
     "${aws_subnet.CRBS-subnet-private-c.id}", 
@@ -1018,12 +1110,12 @@ resource "aws_autoscaling_group" "API-asg" {
   }
 }
 
-resource "aws_autoscaling_policy" "API-asg-policy" {
-  name                   = "API-asg-policy"
+resource "aws_autoscaling_policy" "API-asg2-policy" {
+  name                   = "API-asg2-policy"
   scaling_adjustment     = 80
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.API-asg.name}"
+  autoscaling_group_name = "${aws_autoscaling_group.API-asg2.name}"
 }
 
 
@@ -1057,70 +1149,75 @@ resource "aws_codedeploy_app" "CRBS-codedeploy-app" {
   name = "CRBS-codedeploy-app"
 }
 
-resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group" {
+resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group1" {
   app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name  = "CRBS-UI-deployment-group"
+  deployment_group_name  = "CRBS-UI-deployment-group1"
   service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
 
-  autoscaling_groups     = [aws_autoscaling_group.UI-asg.name]
+  autoscaling_groups     = [aws_autoscaling_group.UI-asg1.name]
 
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
-      
-    }
-    
-  }
+  #  ec2_tag_set {
+  #   ec2_tag_filter {
+  #     key   = "Name"
+  #     type  = "KEY_AND_VALUE"
+  #     value = "UI-asg1"
+  #   }
+  # }
+
   auto_rollback_configuration {
-    enabled = false
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
   }
-  
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type   = "BLUE_GREEN"
+    deployment_type   = "IN_PLACE"
   }
 
   load_balancer_info {
     target_group_info {
-        name = "${aws_lb_target_group.CRBS-UI.name}"
+        name = "${aws_lb_target_group.CRBS-UI1.name}"
     }
   }
 }
 
-resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
-  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+resource "aws_codedeploy_deployment_group" "CRBS-UI-deployment-group2" {
+  app_name               = aws_codedeploy_app.CRBS-codedeploy-app.name
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
-  deployment_group_name = "CRBS-API-deployment-group"
-  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+  deployment_group_name  = "CRBS-UI-deployment-group2"
+  service_role_arn       = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
 
-  autoscaling_groups                = [aws_autoscaling_group.API-asg.name]
+  autoscaling_groups     = [aws_autoscaling_group.UI-asg2.name]
 
-  blue_green_deployment_config {
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-    terminate_blue_instances_on_deployment_success {
-      action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-    green_fleet_provisioning_option {
-      action                            = "COPY_AUTO_SCALING_GROUP"
-      
-    }
-    
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
   }
 
-    auto_rollback_configuration {
-    enabled = false
+  deployment_style {
+    deployment_option = "WITH_TRAFFIC_CONTROL"
+    deployment_type   = "IN_PLACE"
+  }
+
+  load_balancer_info {
+    target_group_info {
+        name = "${aws_lb_target_group.CRBS-UI2.name}"
+    }
+  }
+}
+
+resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group1" {
+  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"
+  deployment_group_name = "CRBS-API-deployment-group1"
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+
+  autoscaling_groups                = [aws_autoscaling_group.API-asg1.name]
+
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
   }
 
   deployment_style {
@@ -1131,6 +1228,31 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group" {
   load_balancer_info {
     target_group_info {
         name = "${aws_lb_target_group.CRBS-API.name}"
+    }
+  }
+}
+
+resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group2" {
+  app_name              = aws_codedeploy_app.CRBS-codedeploy-app.name
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"
+  deployment_group_name = "CRBS-API-deployment-group2"
+  service_role_arn      = "arn:aws:iam::144149479695:role/landingproject_codeDeploy_codeDeploy"
+
+  autoscaling_groups                = [aws_autoscaling_group.API-asg2.name]
+
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
+  }
+
+  deployment_style {
+    deployment_option = "WITH_TRAFFIC_CONTROL"
+    deployment_type   = "BLUE_GREEN"
+  }
+
+  load_balancer_info {
+    target_group_info {
+        name = "${aws_lb_target_group.CRBS-API2.name}"
     }
   }
 }

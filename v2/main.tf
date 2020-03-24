@@ -181,7 +181,6 @@ resource "aws_network_acl" "CRBS-acl-public" {
     aws_subnet.CRBS-subnet-public-2a.id,
     aws_subnet.CRBS-subnet-public-c.id
    ]
-    
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -260,15 +259,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     protocol   = "tcp"
     rule_no    = 120
     action     = "allow"
-    cidr_block = "172.16.3.0/24"
-    from_port  = 22
-    to_port    = 22
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 121
-    action     = "allow"
-    cidr_block = "172.16.4.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 22
     to_port    = 22
   }
@@ -300,15 +291,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     protocol   = "tcp"
     rule_no    = 150
     action     = "allow"
-    cidr_block = "172.16.3.0/24"
-    from_port  = 3306
-    to_port    = 3306
-  }
-  egress {
-    protocol   = "tcp"
-    rule_no    = 151
-    action     = "allow"
-    cidr_block = "172.16.4.0/24"
+    cidr_block = "172.16.0.0/16"
     from_port  = 3306
     to_port    = 3306
   }
@@ -376,9 +359,9 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 140
     action     = "allow"
-    cidr_block = "172.16.0.0/16"
-    from_port  = 1024
-    to_port    = 65535
+    cidr_block = "52.0.0.0/8"
+    from_port  = 40000
+    to_port    = 50000
   }
     ingress {
     protocol   = "tcp"
