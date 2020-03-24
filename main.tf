@@ -805,15 +805,15 @@ resource "aws_lb_target_group" "CRBS-UI2" {
 }
 
 # External listener
-resource "aws_lb_listener" "CRBS-UI-listener" {
-  load_balancer_arn = aws_lb.CRBS-external.arn
-  port              = "8080"
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.CRBS-UI.arn
-  }
-}
+# resource "aws_lb_listener" "CRBS-UI-listener" {
+#   load_balancer_arn = aws_lb.CRBS-external.arn
+#   port              = "8080"
+#   protocol          = "HTTP"
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.CRBS-UI.arn
+#   }
+# }
 
 # ========================================================
 
@@ -869,15 +869,15 @@ resource "aws_lb_target_group" "CRBS-API2" {
 }
 
 # Internal listener
-resource "aws_lb_listener" "CRBS-API-listener" {
-  load_balancer_arn = aws_lb.CRBS-internal.arn
-  port              = "8090"
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.CRBS-API.arn
-  }
-}
+# resource "aws_lb_listener" "CRBS-API-listener" {
+#   load_balancer_arn = aws_lb.CRBS-internal.arn
+#   port              = "8090"
+#   protocol          = "HTTP"
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.CRBS-API.arn
+#   }
+# }
 
 
 # =================================================Instance Policy & Role======================================================

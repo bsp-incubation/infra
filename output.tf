@@ -41,11 +41,11 @@ output "CRBS_internal_dns_name" {
 }
 
 output "UI_asg" {
-  value="${aws_autoscaling_group.UI-asg.name}"
+  value="${aws_autoscaling_group.UI-asg1.name}"
 }
 
 output "API_asg" {
-  value="${aws_autoscaling_group.API-asg.name}"
+  value="${aws_autoscaling_group.API-asg1.name}"
 }
 
 output "CRBS_rds_instance_address" {
@@ -61,9 +61,9 @@ output "aws_codedeploy_app" {
 }
 
 output "aws_codedeploy_deployment_group_UI" {
-  value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group.deployment_group_name}"
+  value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group1.deployment_group_name}"
 }
 
 output "aws_codedeploy_deployment_group_API" {
-  value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group.deployment_group_name}"
+  value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group1.deployment_group_name}"
 }
