@@ -31,11 +31,11 @@ output "security_group_public_id" {
 output "security_group_private_id" {
   value="${aws_security_group.CRBS-security_group-private.id}"
 }
-output "ex-lb-arn" {
+output "ex_lb_arn" {
   value="${aws_lb.CRBS-external.arn}"
 }
 
-output "in-lb-arn" {
+output "in_lb_arn" {
   value="${aws_lb.CRBS-internal.arn}"
 }
 
@@ -55,19 +55,19 @@ output "API_asg2" {
   value="${aws_autoscaling_group.API-asg2.name}"
 }
 
-output "UI-tg1" {
+output "UI_tg1" {
   value="${aws_lb_target_group.CRBS-UI1.arn}"
 }
 
-output "API-tg1" {
+output "API_tg1" {
   value="${aws_lb_target_group.CRBS-API1.arn}"
 }
 
-output "UI-tg2" {
+output "UI_tg2" {
   value="${aws_lb_target_group.CRBS-UI2.arn}"
 }
 
-output "API-tg2" {
+output "API_tg2" {
   value="${aws_lb_target_group.CRBS-API2.arn}"
 }
 
@@ -83,18 +83,18 @@ output "aws_codedeploy_app" {
   value="${aws_codedeploy_app.CRBS-codedeploy-app.name}"
 }
 
-output "dg-UI1" {
+output "dg_UI1" {
   value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group1.deployment_group_name}"
 }
 
-output "dg-API1" {
+output "dg_API1" {
   value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group1.deployment_group_name}"
 }
 
-output "dg-UI2" {
+output "dg_UI2" {
   value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group2.deployment_group_name}"
 }
 
-output "dg-API2" {
+output "dg_API2" {
   value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group2.deployment_group_name}"
 }
