@@ -4,9 +4,6 @@ output "igw_id" {
 output "nat_id" {
   value="${aws_nat_gateway.CRBS-natgateway.id}"
 }
-output "ex_lb_arn" {
-  value="${aws_lb.CRBS-external.arn}"
-}
 
 output "CRBS_rds_instance_id" {
   value="${aws_db_instance.CRBS-rds-instance.identifier}"

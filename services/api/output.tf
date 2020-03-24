@@ -31,10 +31,6 @@ output "API_tg2" {
   value="${aws_lb_target_group.CRBS-API2.arn}"
 }
 
-output "aws_codedeploy_app" {
-  value="${aws_codedeploy_app.CRBS-codedeploy-app.name}"
-}
-
 output "dg_API1" {
   value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group1.deployment_group_name}"
 }

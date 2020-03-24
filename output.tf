@@ -56,19 +56,19 @@ output "API_asg2" {
 }
 
 output "UI_tg1" {
-  value=module.ui.CRBS-UI1
+  value=module.ui.UI_tg1
 }
 
 output "API_tg1" {
-  value=module.api.CRBS-API1
+  value=module.api.API_tg1
 }
 
 output "UI_tg2" {
-  value=module.ui.CRBS-UI2
+  value=module.ui.UI_tg2
 }
 
 output "API_tg2" {
-  value=module.api.CRBS-API2
+  value=module.api.API_tg2
 }
 
 output "CRBS_rds_instance_id" {
@@ -84,17 +84,17 @@ output "aws_codedeploy_app" {
 }
 
 output "dg_UI1" {
-  value=module.ui.CRBS-UI-deployment-group1
+  value=module.ui.dg_UI1
 }
 
 output "dg_API1" {
-  value=module.api.CRBS-API-deployment-group1
+  value=module.api.dg_API1
 }
 
 output "dg_UI2" {
-  value=module.ui.CRBS-UI-deployment-group2
+  value=module.ui.dg_UI2
 }
 
 output "dg_API2" {
-  value=module.api.CRBS-API-deployment-group2
+  value=module.api.dg_API2
 }
