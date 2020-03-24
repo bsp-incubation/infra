@@ -1,0 +1,27 @@
+{
+    "LoadBalancerArn": "",
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "DefaultActions": [
+        {
+            "Type": "forward",
+            "ForwardConfig": {
+                "TargetGroups": [
+                    {
+                        "TargetGroupArn": "",
+                        "Weight": 1
+                    },
+                    {
+                        "TargetGroupArn": "",
+                        "Weight": 0
+                    }
+                ],
+                "TargetGroupStickinessConfig": {
+                    "Enabled": true,
+                    "DurationSeconds": 0
+                }
+            }
+        }
+    ]
+}
+
