@@ -1227,7 +1227,7 @@ resource "aws_codedeploy_deployment_group" "CRBS-API-deployment-group1" {
 
   load_balancer_info {
     target_group_info {
-        name = "${aws_lb_target_group.CRBS-API.name}"
+        name = "${aws_lb_target_group.CRBS-API1.name}"
     }
   }
 }
