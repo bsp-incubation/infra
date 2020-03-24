@@ -1,7 +1,7 @@
 # dev VPC에서 사용할 IGW를 정의한다.
 # IGW는 AZ에 무관하게 한개의 IGW를 공유해서 사용할 수 있다.
 resource "aws_internet_gateway" "CRBS-igw" {
-  vpc_id = aws_vpc.CRBS-vpc.id
+  vpc_id = var.vpc_id
   tags = { Name = "CRBS-igw" }
 }
 
@@ -16,7 +16,7 @@ resource "aws_eip" "CRBS-eip" {
 # NAT Gateway
 resource "aws_nat_gateway" "CRBS-natgateway" {
   allocation_id = aws_eip.CRBS-eip.id
-  subnet_id     = aws_subnet.CRBS-subnet-public-a.id
+  subnet_id     = var.CRBS-subnet-public-a
   depends_on        = [aws_internet_gateway.CRBS-igw]
   tags = { Name = "CRBS-natgateway" }
 }
