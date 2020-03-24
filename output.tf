@@ -2,41 +2,41 @@ output "vpc_id" {
   value=module.vpc.id
 }
 output "public_subnet_a_id" {
-  value=module.ui.CRBS-subnet-public-a
+  value=module.ui.public_subnet_a_id
 }
 output "public_subnet_c_id" {
-  value=module.ui.CRBS-subnet-public-c
+  value=module.ui.public_subnet_c_id
 }
 output "private_subnet_a_id" {
-  value=module.api.CRBS-subnet-private-a
+  value=module.api.private_subnet_a_id
 }
 output "private_subnet_c_id" {
-  value=module.api.CRBS-subnet-private-c
+  value=module.api.private_subnet_c_id
 }
 output "igw_id" {
-  value=module.crbs.CRBS-igw
+  value=module.crbs.igw_id
 }
 output "nat_id" {
-  value=module.crbs.CRBS-natgateway
+  value=module.crbs.nat_id
 }
 output "route_table_public_id" {
-  value=module.ui.CRBS-route_table-public
+  value=module.ui.route_table_public_id
 }
 output "route_table_private_id" {
-  value=module.api.CRBS-route_table-private
+  value=module.api.route_table_private_id
 }
 output "security_group_public_id" {
-  value=module.ui.CRBS-security_group-public
+  value=module.ui.security_group_public_id
 }
 output "security_group_private_id" {
-  value=module.api.CRBS-security_group-private
+  value=module.api.security_group_private_id
 }
 output "ex_lb_arn" {
-  value=module.ui.CRBS-external
+  value=module.ui.ex_lb_arn
 }
 
 output "in_lb_arn" {
-  value=module.api.CRBS-internal
+  value=module.api.in_lb_arn
 }
 
 output "UI_asg1" {
