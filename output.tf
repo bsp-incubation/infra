@@ -31,39 +31,70 @@ output "security_group_public_id" {
 output "security_group_private_id" {
   value="${aws_security_group.CRBS-security_group-private.id}"
 }
-
-output "CRBS_external_dns_name" {
-  value="${aws_lb.CRBS-external.dns_name}"
+output "ex-lb-arn" {
+  value="${aws_lb.CRBS-external.arn}"
 }
 
-output "CRBS_internal_dns_name" {
-  value="${aws_lb.CRBS-internal.dns_name}"
+output "in-lb-arn" {
+  value="${aws_lb.CRBS-internal.arn}"
 }
 
-output "UI_asg" {
+output "UI_asg1" {
   value="${aws_autoscaling_group.UI-asg1.name}"
 }
 
-output "API_asg" {
+output "API_asg1" {
   value="${aws_autoscaling_group.API-asg1.name}"
 }
 
-output "CRBS_rds_instance_address" {
-  value="${aws_db_instance.CRBS-rds-instance.address}"
+output "UI_asg2" {
+  value="${aws_autoscaling_group.UI-asg2.name}"
+}
+
+output "API_asg2" {
+  value="${aws_autoscaling_group.API-asg2.name}"
+}
+
+output "UI-tg1" {
+  value="${aws_lb_target_group.UI-asg1.arn}"
+}
+
+output "API-tg1" {
+  value="${aws_lb_target_group.API-asg1.arn}"
+}
+
+output "UI-tg2" {
+  value="${aws_lb_target_group.UI-asg2.arn}"
+}
+
+output "API-tg2" {
+  value="${aws_lb_target_group.API-asg2.arn}"
 }
 
 output "CRBS_rds_instance_id" {
   value="${aws_db_instance.CRBS-rds-instance.identifier}"
 }
 
+output "CRBS_rds_instance_address" {
+  value="${aws_db_instance.CRBS-rds-instance.address}"
+}
+
 output "aws_codedeploy_app" {
   value="${aws_codedeploy_app.CRBS-codedeploy-app.name}"
 }
 
-output "aws_codedeploy_deployment_group_UI" {
+output "dg-UI1" {
   value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group1.deployment_group_name}"
 }
 
-output "aws_codedeploy_deployment_group_API" {
+output "dg-API1" {
   value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group1.deployment_group_name}"
+}
+
+output "dg-UI2" {
+  value="${aws_codedeploy_deployment_group.CRBS-UI-deployment-group2.deployment_group_name}"
+}
+
+output "dg-API2" {
+  value="${aws_codedeploy_deployment_group.CRBS-API-deployment-group2.deployment_group_name}"
 }
