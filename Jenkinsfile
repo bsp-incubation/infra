@@ -60,5 +60,15 @@ chmod +x rds.sh
       }
     }
 
+    stage('Listener') {
+      steps {
+        sh '''cd /var/lib/jenkins/workspace
+cat ids.sh ./infra_master/lb.sh > listener.sh
+chmod +x listener.sh
+./listener.sh
+'''
+      }
+    }
+
   }
 }
