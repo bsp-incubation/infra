@@ -40,19 +40,19 @@ output "in_lb_arn" {
 }
 
 output "UI_asg1" {
-  value=module.ui.UI-asg1
+  value=module.ui.UI_asg1
 }
 
 output "API_asg1" {
-  value=module.api.API-asg1
+  value=module.api.API_asg1
 }
 
 output "UI_asg2" {
-  value=module.ui.UI-asg2
+  value=module.ui.UI_asg2
 }
 
 output "API_asg2" {
-  value=module.api.API-asg2
+  value=module.api.API_asg2
 }
 
 output "UI_tg1" {
