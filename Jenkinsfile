@@ -45,9 +45,8 @@ cp cli.sh /var/lib/jenkins/workspace
 cat ./infra_master/key.sh newid.txt > ids.sh
 chmod +x ids.sh
 cat ids.sh ./infra_master/cli.sh > script.sh
-cat ids.sh ./infra_master/v2/cli.sh > script.sh
 chmod +x script.sh
-chmod +x script.sh'''
+'''
         sh '''cd /var/lib/jenkins/workspace
 cat ids.sh copy.sh > rds.sh
 chmod +x rds.sh
