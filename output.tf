@@ -56,19 +56,19 @@ output "API_asg2" {
 }
 
 output "UI-tg1" {
-  value="${aws_lb_target_group.UI-asg1.arn}"
+  value="${aws_lb_target_group.CRBS-UI1.arn}"
 }
 
 output "API-tg1" {
-  value="${aws_lb_target_group.API-asg1.arn}"
+  value="${aws_lb_target_group.CRBS-API1.arn}"
 }
 
 output "UI-tg2" {
-  value="${aws_lb_target_group.UI-asg2.arn}"
+  value="${aws_lb_target_group.CRBS-UI2.arn}"
 }
 
 output "API-tg2" {
-  value="${aws_lb_target_group.API-asg2.arn}"
+  value="${aws_lb_target_group.CRBS-API2.arn}"
 }
 
 output "CRBS_rds_instance_id" {
