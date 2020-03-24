@@ -36,17 +36,11 @@ sed \'s/ //g\' id.txt > newid.txt
 terraform output -json | jq \'.CRBS_external_dns_name\' > front1.json
 terraform output -json | jq \'.CRBS_internal_dns_name\' > front.json
 terraform output -json | jq \'.CRBS_rds_instance_address\' > back.json
-#terraform output > id.txt
-#sed \'s/ //g\' id.txt > newid.txt
-#terraform output -json | jq \'.CRBS_external_dns_name\' > front1.json
-#terraform output -json | jq \'.CRBS_internal_dns_name\' > front.json
-#terraform output -json | jq \'.CRBS_rds_instance_address\' > back.json'''
+'''
         sh '''cd /var/lib/jenkins/workspace/infra_master
 cp key.sh /var/lib/jenkins/workspace
 cp cli.sh /var/lib/jenkins/workspace
-#cd /var/lib/jenkins/workspace/infra_master
-#cp key.sh /var/lib/jenkins/workspace
-#cp cli.sh /var/lib/jenkins/workspace'''
+'''
         sh '''cd /var/lib/jenkins/workspace
 cat ./infra_master/key.sh newid.txt > ids.sh
 chmod +x ids.sh
@@ -57,16 +51,11 @@ chmod +x script.sh'''
         sh '''cd /var/lib/jenkins/workspace
 cat ids.sh copy.sh > rds.sh
 chmod +x rds.sh
-./rds.sh
-#cd /var/lib/jenkins/workspace
-#cat ids.sh copy.sh > rds.sh
-#chmod +x rds.sh
-#./rds.sh'''
+./rds.sh'''
         withAWS(region: 'ap-northeast-2', credentials: 'hanju') {
           sh '''cd /var/lib/jenkins/workspace/
 ./script.sh
-#cd /var/lib/jenkins/workspace/
-#./script.sh'''
+'''
         }
 
       }
