@@ -25,7 +25,7 @@ resource "aws_lb_target_group" "CRBS-UI1" {
   stickiness {
     type                = "lb_cookie"
     cookie_duration     = 600
-    enabled             = "false"
+    enabled             = "true"
   }
 
   health_check {
@@ -50,7 +50,7 @@ resource "aws_lb_target_group" "CRBS-UI2" {
   stickiness {
     type                = "lb_cookie"
     cookie_duration     = 600
-    enabled             = "false"
+    enabled             = "true"
   }
 
   health_check {
