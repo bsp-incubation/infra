@@ -49,9 +49,9 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 140
     action     = "allow"
-    cidr_block = "52.0.0.0/8"
-    from_port  = 40000
-    to_port    = 50000
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1024
+    to_port    = 65535
   }
     ingress {
     protocol   = "tcp"
@@ -99,8 +99,8 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 130
     action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 1024
+    cidr_block = "172.16.0.0/16"
+    from_port  = 32768
     to_port    = 65535
   }
   egress {

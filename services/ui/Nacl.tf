@@ -109,7 +109,7 @@ resource "aws_network_acl" "CRBS-acl-public" {
     rule_no    = 140
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 1024
+    from_port  = 32768 
     to_port    = 65535
   }
   egress {
