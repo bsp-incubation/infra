@@ -123,7 +123,7 @@ resource "aws_network_acl" "CRBS-acl-private" {
     protocol   = "tcp"
     rule_no    = 150
     action     = "allow"
-    cidr_block = "172.16.0.0/16"
+    cidr_block = "0.0.0.0/0"
     from_port  = 3306
     to_port    = 3306
   }
