@@ -29,11 +29,11 @@ resource "aws_lb_target_group" "CRBS-UI1" {
   }
 
   health_check {
-    healthy_threshold   = 10
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 5
+    timeout             = 2
     path                = var.target_group_external_path
-    interval            = 10
+    interval            = 5
     port                = 8080
   }
   tags = { Name = "CRBS-UI1" }
@@ -54,11 +54,11 @@ resource "aws_lb_target_group" "CRBS-UI2" {
   }
 
   health_check {
-    healthy_threshold   = 10
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 5
+    timeout             = 2
     path                = var.target_group_external_path
-    interval            = 10
+    interval            = 5
     port                = 8080
   }
   tags = { Name = "CRBS-UI2" }

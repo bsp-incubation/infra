@@ -21,12 +21,17 @@ resource "aws_lb_target_group" "CRBS-API1" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   target_type = "instance"
+  stickiness {
+    type                = "lb_cookie"
+    cookie_duration     = 600
+    enabled             = "true"
+  }
   health_check {
-    healthy_threshold   = 10
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 5
+    timeout             = 2
     path                = var.target_group_internal_path
-    interval            = 10
+    interval            = 5
     port                = 8090
   }
   tags = { Name = "CRBS-API1" }
@@ -38,12 +43,17 @@ resource "aws_lb_target_group" "CRBS-API2" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   target_type = "instance"
+  stickiness {
+    type                = "lb_cookie"
+    cookie_duration     = 600
+    enabled             = "true"
+  }
   health_check {
-    healthy_threshold   = 10
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 5
+    timeout             = 2
     path                = var.target_group_internal_path
-    interval            = 10
+    interval            = 5
     port                = 8090
   }
   tags = { Name = "CRBS-API2" }
